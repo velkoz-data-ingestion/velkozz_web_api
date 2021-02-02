@@ -7,11 +7,8 @@ from . import views
 router = routers.DefaultRouter()
 
 # Registering Reddit API routes:
-router.register(r"rwallstreetbets", views.WallStreetBetsViewSets)
-router.register(r"rscience", views.SciencePostsViewSets)
+router.register(r"reddit/rwallstreetbets", views.WallStreetBetsViewSets)
+router.register(r"reddit/rscience", views.SciencePostsViewSets)
 
 # Creating Automatic URL Routing:
-urlpatterns = [
-    path('', include(router.urls)),
-    
-]
+urlpatterns = router.urls

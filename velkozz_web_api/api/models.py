@@ -34,26 +34,23 @@ class RedditPosts(models.Model):
         
         created_on (models.DateTimeField): The Date and Time the post was created in UTC.
         
-        stickied (models.IntegerField): An integer that acts as a boolean value, indicating if the post
-            was "stuck" or "pinned" to the top of the subreddit.
+        stickied (models.BooleanField): A Boolean indicating if the post was "stuck" or 
+            "pinned" to the top of the subreddit.
 
-        over_18 (models.IntegerField): An integer that acts as a boolean value, indicating if the post 
-            is marked Not Safe For Work.
+        over_18 (models.BooleanField): A Boolean indicating if the post is marked Not Safe For Work.
 
-        spoiler (models.IntegerField): An integer that acts as a boolean value, indicating if the post 
-            is marked as a spoiler.
+        spoiler (models.Boolean): A Boolean indicating if the post is marked as a spoiler.
 
         permalink (models.CharField): The permanent url path to the post.
 
         author (models.CharField): The name of the author of the post.
 
-        author_is_gold: (models.IntegerField): An integer that acts as a boolean value, indicating if the author
-            of the post has been given gold. 
+        author_is_gold: (models.IntegerField): A Boolean indicating if the author of the post has been given gold. 
 
-        author_mod: (models.IntegerField): An integer that acts as a boolean value, indicating if the author
+        author_mod: (models.BooleanField): A Boolean, indicating if the author
             of the post is a moderator of the subreddit. 
 
-        author_has_verified_email: (models.IntegerField): An integer that acts as a boolean value, indicating if the author
+        author_has_verified_email: (models.BooleanField): A Boolean Field indicating if the author
             of the post has a verified email. 
 
         author_created (models.DateTimeField): The UTC date and time that the author's account was created.
@@ -72,15 +69,15 @@ class RedditPosts(models.Model):
     upvote_ratio = models.FloatField(null=True)
     score = models.IntegerField(null=True)
     num_comments = models.IntegerField(null=True)
-
-    # Integer Fields for sudo Boolean values:
     created_on = models.DateTimeField()
-    stickied = models.IntegerField(null=True)
-    over_18 = models.IntegerField(null=True)
-    spoiler = models.IntegerField(null=True)
-    author_is_gold = models.IntegerField(null=True)
-    author_mod = models.IntegerField(null=True)
-    author_has_verified_email = models.IntegerField(null=True)
+
+    # Boolean Fields:
+    stickied = models.BooleanField(null=True)
+    over_18 = models.BooleanField(null=True)
+    spoiler = models.BooleanField(null=True)
+    author_is_gold = models.BooleanField(null=True)
+    author_mod = models.BooleanField(null=True)
+    author_has_verified_email = models.BooleanField(null=True)
 
 
     permalink = models.URLField(
@@ -144,3 +141,7 @@ class SciencePosts(RedditPosts):
         verbose_name_plural = "Science Subreddit Posts"
         abstract = False
         ordering = ['created_on']
+
+
+# Market Indicies Pipeline Models:
+  
