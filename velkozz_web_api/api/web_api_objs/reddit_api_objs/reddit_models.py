@@ -1,6 +1,5 @@
 from django.db import models
 
-
 # Reddit Data Pipeline Models:
 class RedditPosts(models.Model):
     """A base model object that represents the data table
@@ -141,7 +140,4 @@ class SciencePosts(RedditPosts):
         verbose_name_plural = "Science Subreddit Posts"
         abstract = False
         ordering = ['created_on']
-
-
-# Market Indicies Pipeline Models:
   

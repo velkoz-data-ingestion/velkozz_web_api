@@ -8,8 +8,8 @@ from rest_framework.response import Response
 import json
 
 # Importing Database Models and Seralizer Objects
-from .models import WallStreetBetsPosts, SciencePosts
-from .serializers import WallStreetBetsSerializer, SciencePostsSerializer
+from .reddit_models import WallStreetBetsPosts, SciencePosts
+from .reddit_serializers import WallStreetBetsSerializer, SciencePostsSerializer
 
 # Reddit Posts ViewSets:
 class WallStreetBetsViewSets(viewsets.ModelViewSet):
