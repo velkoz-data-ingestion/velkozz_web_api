@@ -15,7 +15,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -29,8 +28,11 @@ INSTALLED_APPS = [
     # The REST API application:
     "rest_framework",
 
-    # The main API:
-    "api.apps.ApiConfig"
+    # The Social Media API Application:
+    "social_media_api.apps.SocialMediaAPIConfig",
+
+    # The Finance API Application:
+    "finance_api.apps.FinanceApiConfig"
 ]
 
 MIDDLEWARE = [

@@ -19,5 +19,9 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     
-    path("api/", include("api.urls"))
+    # Routes for the Social Media API urls:
+    path("social_media_api/", include("social_media_api.urls")),
+    
+    # Routes for the Finance Data API urls:
+    path("finance_api/", include("finance_api.urls"))
 ]

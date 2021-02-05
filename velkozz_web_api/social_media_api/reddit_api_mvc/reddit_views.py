@@ -12,7 +12,7 @@ from .reddit_models import WallStreetBetsPosts, SciencePosts
 from .reddit_serializers import WallStreetBetsSerializer, SciencePostsSerializer
 
 # Reddit Posts ViewSets:
-class WallStreetBetsViewSets(viewsets.ModelViewSet):
+class WallStreetBetsViewSet(viewsets.ModelViewSet):
     """The ViewSet that provides REST API routes for the subreddit WallStreetBets
     post database table.
     """
@@ -79,7 +79,7 @@ class WallStreetBetsViewSets(viewsets.ModelViewSet):
         
         return Response(serializer.data)
 
-class SciencePostsViewSets(viewsets.ModelViewSet):
+class SciencePostsViewSet(viewsets.ModelViewSet):
     """The ViewSet that provides REST API routes for the subreddit WallStreetBets
     post database table.
     """
