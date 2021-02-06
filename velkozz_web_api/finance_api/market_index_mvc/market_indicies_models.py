@@ -39,13 +39,15 @@ class SPYIndexComposition(models.Model):
     gics_sector = models.CharField(max_length=100, null=True)
     gics_sub_industry = models.CharField(max_length=100, null=True)
     headquarters_location = models.CharField(max_length=100, null=True)
-    date_added = models.DateField()
+    date_added = models.CharField(max_length=25, null=True)
     cik = models.IntegerField(unique=True)
     founded = models.CharField(max_length=50)    
 
+    def __str__(self):
+        return self.symbol
+
     class Meta:
         verbose_name_plural = "SPY Market Index Composition"
-
 
 # The Dow Jones Industrial Average Index Composition:
 class DJIAIndexComposition(models.Model):
@@ -78,12 +80,14 @@ class DJIAIndexComposition(models.Model):
     symbol = models.CharField(max_length=10, unique=True)
     industry = models.CharField(max_length=150)
     date_added = models.DateTimeField()
-    notes = models.CharField(max_length=200)
-    weighting = models.CharField(max_length=20)
+    notes = models.CharField(max_length=200, null=True)
+    weighting = models.CharField(max_length=20, null=True)
+
+    def __str__(self):
+        return self.symbol
 
     class Meta:
         verbose_name_plural = "DJIA Market Index Composition"
-
 
 # S&P/TSX Index Composition:
 class SPTSXIndexComposition(models.Model):
@@ -110,6 +114,9 @@ class SPTSXIndexComposition(models.Model):
     sector = models.CharField(max_length=100)
     industry = models.CharField(max_length=200)
 
+    def __str__(self):
+        return self.symbol
+
     class Meta:
         verbose_name_plural = "S&P/TSX Market Index Composition"
 
@@ -135,6 +142,9 @@ class FTSE100IndexComposition(models.Model):
     company = models.CharField(max_length=150, unique=True)
     symbol = models.CharField(max_length=10, unique=True)
     industry = models.CharField(max_length=200)
+
+    def __str__(self):
+        return self.symbol
 
     class Meta:
         verbose_name_plural = "FTSE 100 Market Index Composition"
@@ -170,6 +180,9 @@ class SMIComposition(models.Model):
     canton = models.CharField(max_length=100)
     weighting = models.CharField(max_length=20)
 
+    def __str__(self):
+        return self.symbol
+
     class Meta:
         verbose_name_plural = "Swiss Market Index Composition"
 
@@ -196,10 +209,13 @@ class SPIComposition(models.Model):
 
     """
     symbol = models.CharField(max_length=10, unique=True)
-    company = models.CharField(max_length=100, unique=True)
-    smi_family = models.CharField(max_length=100)
-    date_added = models.CharField(max_length=10)
-    notes = models.CharField(max_length=200)
+    company = models.CharField(max_length=100)
+    smi_family = models.CharField(max_length=100, null=True)
+    date_added = models.CharField(max_length=10, null=True)
+    notes = models.CharField(max_length=200, null=True)
+
+    def __str__(self):
+        return self.symbol
 
     class Meta:
         verbose_name_plural = "Swiss Performance Index Composition"

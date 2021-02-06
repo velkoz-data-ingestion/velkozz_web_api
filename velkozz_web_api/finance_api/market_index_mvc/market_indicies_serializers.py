@@ -24,17 +24,17 @@ class DJIAIndexSerializer(MarketIndexSerializers):
         model = DJIAIndexComposition
     
 class SPTSXIndexSerializer(MarketIndexSerializers):
-    class Meta(MarketIndexSerializers):
+    class Meta(MarketIndexSerializers.Meta):
         model = SPTSXIndexComposition
 
 class FTSE100IndexSerializer(MarketIndexSerializers):
-    class Meta(MarketIndexSerializers):
+    class Meta(MarketIndexSerializers.Meta):
         model = FTSE100IndexComposition
 
 class SMISerializer(MarketIndexSerializers):
-    class Meta(MarketIndexSerializers):
+    class Meta(MarketIndexSerializers.Meta):
         model = SMIComposition
 
 class SPISerializer(MarketIndexSerializers):
-    class Meta(MarketIndexSerializers):
+    class Meta(MarketIndexSerializers.Meta):
         model = SPIComposition

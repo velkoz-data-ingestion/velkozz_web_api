@@ -2,7 +2,7 @@
 from django.contrib import admin
 
 # Importing Database Models:
-from .stock_api_mvc.market_indicies_models import *
+from .market_index_mvc.market_indicies_models import *
 
 # Registering the Market Indicies Composition Models to the Admin Dashboard:
 admin.site.register(SPYIndexComposition)
