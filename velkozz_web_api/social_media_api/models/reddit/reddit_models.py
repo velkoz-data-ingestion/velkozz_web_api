@@ -91,6 +91,7 @@ class RedditPosts(models.Model):
     class Meta:
         abstract = True
         ordering = ['created_on']
+        #default_permissions = ('add', 'change', 'delete', 'view')
 
     def __str__(self):
         return self.title
@@ -113,7 +114,7 @@ class WallStreetBetsPosts(RedditPosts):
         default="wallstreetbets",
         editable= False)
 
-    class Meta:
+    class Meta(RedditPosts.Meta):
         verbose_name_plural = "WallStreetBets Subreddit Posts"
         abstract = False
         ordering = ['created_on']
@@ -136,7 +137,7 @@ class SciencePosts(RedditPosts):
         default="science",
         editable= False)
 
-    class Meta:
+    class Meta(RedditPosts.Meta):
         verbose_name_plural = "Science Subreddit Posts"
         abstract = False
         ordering = ['created_on']

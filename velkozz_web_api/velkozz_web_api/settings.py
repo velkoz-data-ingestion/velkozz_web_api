@@ -25,8 +25,13 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    # The REST API application:
+    # Third Party Apps:
     "rest_framework",
+    "rest_framework.authtoken",
+
+    # Local Applications: 
+    # The Custom User Accounts Application:
+    "accounts.apps.UserAccountConfig",
 
     # The Social Media API Application:
     "social_media_api.apps.SocialMediaAPIConfig",
@@ -95,6 +100,17 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# REST API Framework Settings:
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+                'rest_framework.authentication.SessionAuthentication',
+                'rest_framework.authentication.TokenAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES':(
+                'rest_framework.permissions.IsAuthenticated',
+    ),
+
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
@@ -114,3 +130,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# Pointing to the Custom User Model:
+AUTH_USER_MODEL = "accounts.CustomUser"

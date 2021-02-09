@@ -120,7 +120,6 @@ class SPTSXIndexComposition(models.Model):
     class Meta:
         verbose_name_plural = "S&P/TSX Market Index Composition"
 
-
 # Financial Times Stock Exchange 100 Index Composition:
 class FTSE100IndexComposition(models.Model):
     """A data model representing a database table containing information

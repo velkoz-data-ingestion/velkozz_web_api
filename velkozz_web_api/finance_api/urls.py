@@ -3,7 +3,7 @@ from django.urls import include, path
 from rest_framework import routers
 
 # Importing the Market Index Composition Views from the Reddit MVC:
-from .market_index_mvc import market_indicies_views
+from .model_views_seralizers.market_index import market_indicies_views
 
 # Creating Url Router:
 router = routers.DefaultRouter()

@@ -3,12 +3,16 @@ from django.shortcuts import render
 from rest_framework import viewsets
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
+
+# Importing the custom DjangoModelPermissions Module:
+from accounts.permissions import APIModelPermissions
 
 # Importing Data Management Packages:
 import json
 
 # Importing Database Models and Seralizer Objects
-from .reddit_models import WallStreetBetsPosts, SciencePosts
+from social_media_api.models.reddit.reddit_models import WallStreetBetsPosts, SciencePosts
 from .reddit_serializers import WallStreetBetsSerializer, SciencePostsSerializer
 
 # Reddit Posts ViewSets:
@@ -16,8 +20,9 @@ class WallStreetBetsViewSet(viewsets.ModelViewSet):
     """The ViewSet that provides REST API routes for the subreddit WallStreetBets
     post database table.
     """
-    queryset = WallStreetBetsPosts.objects.all().order_by("created_on")
     serializer_class = WallStreetBetsSerializer
+    queryset = WallStreetBetsPosts.objects.none()
+    permission_classes = [IsAuthenticated, APIModelPermissions]    
 
     def list(self, request):
         """The ViewSet method overwritten that contains the

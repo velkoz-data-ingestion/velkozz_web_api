@@ -3,25 +3,18 @@ from django.shortcuts import render
 from rest_framework import viewsets
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
+from django.contrib.auth.models import Permission 
+
+# Importing the custom DjangoModelPermissions Module:
+from accounts.permissions import APIModelPermissions
 
 # Importing Data Management Packages:
 import json
 
 # Importing the Market Index Seralizers and Database Models:
-from .market_indicies_models import *
+from finance_api.models.market_indicies.market_indicies_models import * 
 from .market_indicies_serializers import * 
-
-# Generic Market Index ModelViewSet objects:
-class BaseIndexCompositionViewSet(viewsets.ModelViewSet):
-    """A Generic object that contains all of the boilerplate code
-    for providing the REST API routes for Market Index Composition
-    database tables.
-
-    This object contains all of the boilerplate methods that allow
-    CRUD functions for index composition database tables. Specific
-    Index Composition ViewSets extend this class and add custom 
-    """
-    pass
 
 # Market Indicies ModelViewSet
 class SPYIndexCompositionViewSet(viewsets.ModelViewSet):
@@ -30,6 +23,7 @@ class SPYIndexCompositionViewSet(viewsets.ModelViewSet):
     """
     queryset = SPYIndexComposition.objects.all()
     serializer_class = SPYIndexSerializer
+    permission_classes = [IsAuthenticated, APIModelPermissions]    
 
     def list(self, request):
         """The ViewSet method overwritten that contains the logic for processing GET requests
@@ -38,7 +32,7 @@ class SPYIndexCompositionViewSet(viewsets.ModelViewSet):
         # Creating a context dict to be populated:
         context = {}
         context['request'] = request
-
+                
         # Querying all of the data from the database:
         queryset = SPYIndexComposition.objects.all()
         serializer = SPYIndexSerializer(queryset, many=True, context=context)

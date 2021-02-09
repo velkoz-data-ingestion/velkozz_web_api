@@ -2,7 +2,7 @@
 from rest_framework import serializers
 
 # Importing the Market Index Data Models:
-from .market_indicies_models import *
+from finance_api.models.market_indicies.market_indicies_models import *
 
 # Abstract class for Indicies:
 class MarketIndexSerializers(serializers.HyperlinkedModelSerializer):
