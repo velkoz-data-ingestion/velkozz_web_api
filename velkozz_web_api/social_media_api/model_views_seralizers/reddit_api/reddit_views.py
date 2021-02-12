@@ -5,8 +5,8 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 
-# Importing the custom DjangoModelPermissions Module:
-from accounts.permissions import APIModelPermissions
+# Importing the custom DjangoModelPermissions and ModelViewSets:
+from accounts.views import AbstractModelViewSet
 
 # Importing Data Management Packages:
 import json
@@ -16,14 +16,13 @@ from social_media_api.models.reddit.reddit_models import WallStreetBetsPosts, Sc
 from .reddit_serializers import WallStreetBetsSerializer, SciencePostsSerializer
 
 # Reddit Posts ViewSets:
-class WallStreetBetsViewSet(viewsets.ModelViewSet):
+class WallStreetBetsViewSet(AbstractModelViewSet):
     """The ViewSet that provides REST API routes for the subreddit WallStreetBets
     post database table.
     """
     serializer_class = WallStreetBetsSerializer
     queryset = WallStreetBetsPosts.objects.none()
-    permission_classes = [IsAuthenticated, APIModelPermissions]    
-
+    
     def list(self, request):
         """The ViewSet method overwritten that contains the
         logic for processing GET requests from the r/wallstreetbets post
@@ -55,7 +54,7 @@ class WallStreetBetsViewSet(viewsets.ModelViewSet):
         if request.body:
             wsb_posts = json.loads(request.body)
 
-        # Creating a list of SciencePosts object from Json data via list comprehension:
+        # Creating a list of WallStreetBetsPosts object from Json data via list comprehension:
         wsb_posts_objects = [
             WallStreetBetsPosts(
                 id = post["id"],
@@ -80,11 +79,11 @@ class WallStreetBetsViewSet(viewsets.ModelViewSet):
         ]
 
         # Performing a bulk insert for all posts recieved by the POST request:
-        SciencePosts.objects.bulk_create(wsb_posts_objects)
+        WallStreetBetsPosts.objects.bulk_create(wsb_posts_objects)
         
         return Response(serializer.data)
 
-class SciencePostsViewSet(viewsets.ModelViewSet):
+class SciencePostsViewSet(AbstractModelViewSet):
     """The ViewSet that provides REST API routes for the subreddit WallStreetBets
     post database table.
     """

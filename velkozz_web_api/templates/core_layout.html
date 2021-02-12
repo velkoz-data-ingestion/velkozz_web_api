@@ -1,0 +1,41 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<link rel="stylesheet" type="text/css" href="{% static 'css/core_styling.css' %}">
+
+    {% block head %}
+    {% endblock head %}
+    
+    <title>{% block title %} Default Title {% endblock title %}</title>
+
+</head>
+
+<body>
+
+    {% block navbar %}
+    <nav class="navbar">
+        <a href="{% url 'main_index' %}">Velkozz REST APIs</a>
+        
+        {# Conditional Displaying A Login or Logout promt based on if a user is logged in: #}
+        {% if request.user.is_authenticated == True %}
+            <a href="{% url 'user_dashboard' %}">Your API Dashboard</a>
+            <a href="{% url 'logout' %}?next={% url 'main_index' %}" id="nav-login">Logout</a>
+        {% else %}
+            <a href="{% url 'login' %}" id="nav-login">Login</a>
+        {% endif %}    
+    </nav>
+    {% endblock navbar %}
+
+    {% block body %}
+    {% endblock body %}
+
+    {% block javascript %}
+    {% endblock javascript %}
+
+</body>
+</html>

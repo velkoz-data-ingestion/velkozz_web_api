@@ -1,0 +1,30 @@
+/* Removing Margin so navbar is flush: */
+body {
+    font-family: Arial;
+}
+
+/* Core NavBar Styling  */
+.navbar {
+    display: block;
+    height: 80px;
+    line-height: 50px;
+    background-color: rgb(78, 75, 75);
+    overflow: hidden;
+    margin: -8px;
+
+}
+
+.navbar a {
+    text-decoration: none;
+    float: left;
+    color: #ffffff;
+    text-align: center;
+    font-size: 17px;
+    padding-left: 0.5em;
+    padding-right: 1em;
+    padding-top: 0.8em;
+}
+
+#nav-login {
+    float: right;
+}

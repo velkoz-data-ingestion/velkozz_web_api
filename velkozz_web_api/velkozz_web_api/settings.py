@@ -1,4 +1,5 @@
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -15,6 +16,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+# Url Path for Login Redirect:
+LOGIN_REDIRECT_URL = '/'
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -28,7 +32,8 @@ INSTALLED_APPS = [
     # Third Party Apps:
     "rest_framework",
     "rest_framework.authtoken",
-
+    "rest_auth",
+    
     # Local Applications: 
     # The Custom User Accounts Application:
     "accounts.apps.UserAccountConfig",
@@ -55,7 +60,7 @@ ROOT_URLCONF = 'velkozz_web_api.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [(os.path.join(BASE_DIR, "templates"))], # Adding the templates directory for global templating.
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -130,6 +135,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+# Adding a global static directory to the app: 
+STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
 
 # Pointing to the Custom User Model:
 AUTH_USER_MODEL = "accounts.CustomUser"

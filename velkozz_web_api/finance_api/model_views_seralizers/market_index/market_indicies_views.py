@@ -6,24 +6,21 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth.models import Permission 
 
-# Importing the custom DjangoModelPermissions Module:
-from accounts.permissions import APIModelPermissions
-
 # Importing Data Management Packages:
 import json
 
-# Importing the Market Index Seralizers and Database Models:
+# Importing the Market Index Seralizers, Database Models and Base ModelViewSets:
+from accounts.views import AbstractModelViewSet
 from finance_api.models.market_indicies.market_indicies_models import * 
 from .market_indicies_serializers import * 
 
 # Market Indicies ModelViewSet
-class SPYIndexCompositionViewSet(viewsets.ModelViewSet):
+class SPYIndexCompositionViewSet(AbstractModelViewSet):
     """The ViewSets providing the REST API routes for the SPYIndexComposition
     database table.
     """
     queryset = SPYIndexComposition.objects.all()
     serializer_class = SPYIndexSerializer
-    permission_classes = [IsAuthenticated, APIModelPermissions]    
 
     def list(self, request):
         """The ViewSet method overwritten that contains the logic for processing GET requests
@@ -74,7 +71,7 @@ class SPYIndexCompositionViewSet(viewsets.ModelViewSet):
                 
         return Response(serializer.data)
 
-class DJIAIndexCompositionViewSet(viewsets.ModelViewSet):
+class DJIAIndexCompositionViewSet(AbstractModelViewSet):
     """The ViewSets providing the REST API routes for the DJIAIndexComposition
     database table.
     """
@@ -130,7 +127,7 @@ class DJIAIndexCompositionViewSet(viewsets.ModelViewSet):
                 
         return Response(serializer.data)
 
-class SPTSXIndexCompositionViewSet(viewsets.ModelViewSet):
+class SPTSXIndexCompositionViewSet(AbstractModelViewSet):
     """The ViewSets providing the REST API routes for the SPTSXIndexComposition
     database table.
     """
@@ -182,7 +179,7 @@ class SPTSXIndexCompositionViewSet(viewsets.ModelViewSet):
                 
         return Response(serializer.data)
 
-class FTSE100IndexCompositionViewSet(viewsets.ModelViewSet):
+class FTSE100IndexCompositionViewSet(AbstractModelViewSet):
     """The ViewSets providing the REST API routes for the FTSE100IndexComposition
     database table.
     """
@@ -233,7 +230,7 @@ class FTSE100IndexCompositionViewSet(viewsets.ModelViewSet):
                 
         return Response(serializer.data)
 
-class SMICompositionViewSet(viewsets.ModelViewSet):
+class SMICompositionViewSet(AbstractModelViewSet):
     """The ViewSets providing the REST API routes for the SMIComposition
     database table.
     """
@@ -287,7 +284,7 @@ class SMICompositionViewSet(viewsets.ModelViewSet):
                 
         return Response(serializer.data)
 
-class SPICompositionViewSet(viewsets.ModelViewSet):
+class SPICompositionViewSet(AbstractModelViewSet):
     """
     The ViewSets providing the REST API routes for the SPIComposition
     database table.

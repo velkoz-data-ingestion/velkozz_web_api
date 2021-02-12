@@ -3,9 +3,10 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('django-accounts/', include('django.contrib.auth.urls')),
     
-    # Django REST API Authentication:
-    path("api-auth/", include('rest_framework.urls')),
+    # Django REST API Authentication url:
+    path("rest-auth/", include("rest_auth.urls")),
     
     # Routes for the main web core index urls:
     path("", include("accounts.urls")),

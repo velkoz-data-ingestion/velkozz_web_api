@@ -4,7 +4,7 @@ import copy
 # Importing Django Permissions Objects:
 from rest_framework.permissions import DjangoModelPermissions
 
-class APIModelPermissions(DjangoModelPermissions):
+class HasAPIAccess(DjangoModelPermissions):
     """
     An object that extends the base DjangoModelPermissions class to
     add the necessary additional permission functionality for each
