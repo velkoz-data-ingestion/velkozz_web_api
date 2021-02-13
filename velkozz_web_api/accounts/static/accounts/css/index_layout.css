@@ -1,0 +1,40 @@
+/* Creating main Internal Grid layout */
+.internal-grid {
+    display: grid;
+    grid-template-columns: auto auto;
+    grid-template-rows: 3fr auto;
+    gap: 1rem;
+    padding: 0.5rem;
+} 
+
+/* Configuring card element grid placements: */
+/* Main Display Card: */
+.main-card {
+    grid-column-start: 1;
+    grid-column-end: 3;
+    color: var(--h-color);
+}
+
+.main-card h1 {
+    font-size: 3em;
+    text-align: center;
+    padding-bottom: .5em;
+    border-bottom: var(--h-border);
+}
+
+.main-card p {
+    line-height: 1.8;
+    text-align: center;
+    
+}
+
+/* Two Sub Display Cards: */
+.card-link:hover {outline: none;}
+.card-link:visited {outline: none;}
+
+/* The Sub Display Card: */
+.sub-card h2 {text-align: center;}
+.sub-card p {
+    line-height: 1.3;
+    text-align: center;
+}
