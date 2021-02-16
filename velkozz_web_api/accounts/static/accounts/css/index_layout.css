@@ -1,10 +1,10 @@
 /* Creating main Internal Grid layout */
 .internal-grid {
     display: grid;
-    grid-template-columns: auto auto;
-    grid-template-rows: 3fr auto;
     gap: 1rem;
-    padding: 0.5rem;
+
+    /* Dynamic column and row creation and styling: */
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
 } 
 
 /* Configuring card element grid placements: */
@@ -13,6 +13,7 @@
     grid-column-start: 1;
     grid-column-end: 3;
     color: var(--h-color);
+    padding-bottom: 1rem;
 }
 
 .main-card h1 {
@@ -25,6 +26,7 @@
 .main-card p {
     line-height: 1.8;
     text-align: center;
+    color: var(--text-color); 
     
 }
 
@@ -33,8 +35,47 @@
 .card-link:visited {outline: none;}
 
 /* The Sub Display Card: */
-.sub-card h2 {text-align: center;}
+.sub-card h2 {
+    text-align: center;
+    border-bottom: var(--h-border);
+}
 .sub-card p {
     line-height: 1.3;
     text-align: center;
+    color: var(--text-color); 
+}
+
+/* Styling the Two Button Grid: */
+.two-button-grid {
+    display: grid;
+    grid-template-columns: auto auto;
+    grid-template-rows: auto;
+    gap: 1rem;
+}
+
+.two-button-grid a {
+    background: var(--green);
+    border-radius: 3px;
+    vertical-align: bottom;
+    display: inline-flex;
+    align-items: center;
+    padding: 1.25em 2.5em;
+    margin-bottom: 1em;
+    outline: none;
+    border: 0;
+}
+
+.btn, .btn:visited {
+    border: none !important;
+    outline: none !important;
+    text-decoration: none !important;
+    color:inherit;
+}
+.btn:hover {
+    box-shadow: rgba(2, 8, 20, 0.1) 0px 0.35em 1.175em, rgba(2, 8, 20, 0.08) 0px 0.175em 0.5em;
+    transform: translateY(-3px) scale(1.1);
+}
+
+.two-button-grid img {
+    margin-left: 0.5em;
 }

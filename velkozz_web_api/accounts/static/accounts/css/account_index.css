@@ -1,0 +1,12 @@
+/* Styling the Grid to list API info cards: */
+.user_api_grid {
+    display: grid;
+    gap: 1rem;
+
+    /* Dynamic column and row creation and styling: */
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+
+.user_api_grid div {
+    border-radius: 0.25rem;
+}

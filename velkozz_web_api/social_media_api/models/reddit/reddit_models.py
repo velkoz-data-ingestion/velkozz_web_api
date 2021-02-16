@@ -61,8 +61,7 @@ class RedditPosts(models.Model):
     id = models.CharField(
         max_length=20,
         db_index= True,
-        primary_key=True,
-        unique=True) 
+        primary_key=True) 
 
     title = models.CharField(max_length= 300)
     content = models.TextField(null=True)
@@ -80,7 +79,7 @@ class RedditPosts(models.Model):
     author_has_verified_email = models.BooleanField(null=True)
 
 
-    permalink = models.URLField(
+    permalink = models.CharField(
         max_length=300,
         null=True
     )

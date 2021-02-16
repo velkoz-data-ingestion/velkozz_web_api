@@ -1,7 +1,28 @@
 {% extends "core_layout.html" %}
 {% load static %}
 
+{% block head %}
+    <link rel="stylesheet" href="{% static 'accounts/css/account_index.css' %}">
+{% endblock head %}
+
 
 {% block body %}
-<h1>{{user.username}}</h1>
-{% endblock body %}
+    <h1>{{request.user.username}}</h1>
+
+    <section class="user_api_grid">
+        {% for api_app in api_permissions %}
+
+        <div class=card>
+            <h1>{{api_app.app_name}}</h1>
+            <p>{{api_app.app_description}}</p>
+            <a href="{% url api_app.module_name %}">{{api_app.module_name}}</a>
+        </div>
+        
+        
+        {% endfor %}
+    
+    </section>
+
+    {% endblock body %}
+
+

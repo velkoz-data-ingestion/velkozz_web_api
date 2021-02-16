@@ -1,27 +1,19 @@
-/* Confuring Main Grid Container */
-.main-grid {
-    display: grid;
-    gap: 1rem;
-
-}
-
 /* Header Card Custom Config */
 .header-card {
     background: #353535;
     font-size: 3rem;
     box-shadow: rgba(3, 8, 20, 0.1) 0px 0.15rem 0.5rem, rgba(2, 8, 20, 0.1) 0px 0.075rem 0.175rem;
-    height: 100%;
+    height: 5rem;
     width: 100%;
     transition: all 500ms;
     overflow: hidden;
-    margin-bottom: 0.5em;
-
+    margin-bottom: 5rem;
+    position: fixed;
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
 
 }
-
 .header-card a {
     text-decoration: none;
     float: left;
@@ -42,3 +34,7 @@
     float: right;
 }
 
+.main-body-content {
+    margin-top: 5rem;
+    padding: 0.5rem;
+}

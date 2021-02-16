@@ -14,3 +14,4 @@ router.register(r"reddit/rscience", reddit_views.SciencePostsViewSet)
 
 # Creating Automatic URL Routing:
 urlpatterns = router.urls
+    
