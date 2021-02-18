@@ -35,3 +35,11 @@ def get_user_api_app_permissions(permission_lst):
     api_app_permissions = set(api_app_permission_lst)
 
     return api_app_permissions
+
+# Method that ingests a request and writes the request to a database table:
+def log_api_request(request, api_log_database_model):
+    """
+    - Extract all features of the api request from the http request object.
+    - Write the API request to the database. 
+    """
+    pass 

@@ -34,3 +34,32 @@ class APIApplication(models.Model):
 
     class Meta:
         verbose_name_plural = "API Applications"
+
+class APIRequestLog(models.Model):
+    """The Database Model representing a timeseries of requests made to each 
+    data api.
+
+    This database module is populated via a ingestion function called in viewset
+    Throttler. Queries are made against this data model to build a timeseries
+    graph showing the amount of requests to an API a specific user makes. 
+
+    Attributes:
+        request_user (models.ForeginKey): The foregin key that connects to an instance of the
+            application's user model. (CustomUser).
+        
+        request_type (models.CharField): The type of request that was made to the API
+            (eg: GET, POST).
+        
+        request_time (models.DateTimeField): The date and time when the request was made.
+
+        api_application (models.CharField): The name of the API application that the request 
+            was made to.
+
+    """
+    request_user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    request_type = models.CharField(max_length=10)
+    request_time = models.DateTimeField()
+    api_application = models.CharField(max_length=100)
+
+    def __str__(self):
+        return f"{self.request_user}_{self.request_time}_{api_application}"
