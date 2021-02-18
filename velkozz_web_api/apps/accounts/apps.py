@@ -19,4 +19,17 @@ class UserAccountConfig(AppConfig):
         manually populated to include permissions for each API group.
 
         """
-        pass
+        # Importing the Django Auth models:
+        from django.contrib.auth.models import Group
+        #from accounts.models import CustomUser
+
+        # TODO: Determine if this should be done hardcoded or after init in database:
+        # API user permissions:
+        Group.objects.update_or_create(name="api_free_tier")
+        Group.objects.update_or_create(name="api_senior_tier")
+        Group.objects.update_or_create(name="api_professional_tier")
+
+        # API Developer permission groups:
+        Group.objects.update_or_create(name="api_ingestion")
+        Group.objects.update_or_create(name="api_developer")
+

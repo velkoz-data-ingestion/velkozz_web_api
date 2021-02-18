@@ -58,7 +58,7 @@ class APIRequestLog(models.Model):
     """
     request_user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     request_type = models.CharField(max_length=10)
-    request_time = models.DateTimeField()
+    request_time = models.DateTimeField(auto_now_add=True)
     api_application = models.CharField(max_length=100)
 
     def __str__(self):

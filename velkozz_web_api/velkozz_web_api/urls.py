@@ -9,11 +9,11 @@ urlpatterns = [
     path("rest-auth/", include("rest_auth.urls")),
     
     # Routes for the main web core index urls:
-    path("", include("accounts.urls")),
+    path("", include("apps.accounts.urls")),
     
     # Routes for the Social Media API urls:
-    path("social_media_api/", include("social_media_api.urls")),
+    path("social_media_api/", include("apps.social_media_api.urls")),
     
     # Routes for the Finance Data API urls:
-    path("finance_api/", include("finance_api.urls"))
+    path("finance_api/", include("apps.finance_api.urls"))
 ]

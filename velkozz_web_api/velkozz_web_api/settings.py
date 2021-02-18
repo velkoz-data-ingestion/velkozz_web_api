@@ -36,7 +36,7 @@ INSTALLED_APPS = [
     
     # Local Applications: 
     # The Custom User Accounts Application:
-    "accounts.apps.UserAccountConfig",
+    "apps.accounts.apps.UserAccountConfig",
 
     # The Social Media API Application:
     "social_media_api.apps.SocialMediaAPIConfig",

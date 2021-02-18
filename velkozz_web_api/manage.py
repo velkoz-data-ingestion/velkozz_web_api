@@ -3,10 +3,13 @@
 import os
 import sys
 
-
 def main():
     """Run administrative tasks."""
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'velkozz_web_api.settings')
+    
+    from django.conf import settings
+    sys.path.append(os.path.join(settings.BASE_DIR, "apps"))
+    
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:
