@@ -36,7 +36,7 @@ INSTALLED_APPS = [
     
     # Local Applications: 
     # The Custom User Accounts Application:
-    "apps.accounts.apps.UserAccountConfig",
+    "accounts.apps.UserAccountConfig",
 
     # The Social Media API Application:
     "social_media_api.apps.SocialMediaAPIConfig",
@@ -107,14 +107,37 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # REST API Framework Settings:
 REST_FRAMEWORK = {
+
+    # DRF Authentication:
     'DEFAULT_AUTHENTICATION_CLASSES': (
                 'rest_framework.authentication.SessionAuthentication',
                 'rest_framework.authentication.TokenAuthentication',
     ),
+
+    # DRF Permissions:
     'DEFAULT_PERMISSION_CLASSES':(
                 'rest_framework.permissions.IsAuthenticated',
     ),
 
+    # DRF Throtteling:
+    'DEFAULT_THROTTLE_CLASSES': [],
+    'GROUP_THROTTLE_RATES': {
+        
+        'api_burst_free_tier' : '10/minute',
+        'api_sus_free_tier' : '100/day',
+
+        'api_burst_senior_tier' : '50/minute',
+        'api_sus_senior_tier' : '200/day',
+
+        'api_burst_professional_tier' : '100/minute',
+        'api_sus_professional_tier' : '300/day',
+
+        'api_burst_ingestion' : '10000/minuite',
+        'api_sus_ingestion' : '100000/day',
+
+        'api_burst_developer' : '10000/minuite',
+        'api_sus_developer' : '100000/day'
+    }
 }
 
 # Internationalization

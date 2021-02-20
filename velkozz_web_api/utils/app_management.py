@@ -1,3 +1,5 @@
+# Importing Django packages:
+from django.urls import resolve
 
 # Method that extracts a list of all API apps for the project:
 def get_user_api_app_permissions(permission_lst):
@@ -61,14 +63,62 @@ def log_api_request(request, api_log_database_model):
     """
     # Enuring that the request user is authenticated for redundant authentication:
     if request.user.is_authenticated:
-
+        
+        # Extracting the full path to the specific request function:  
+        url_resolver = resolve(request.path)._func_path 
+        
+        # Parsing the view function path to extract App name and ModelView:
+        # Makes HEAVY assumptions about the structure of funtion path:
+        func_path_lst = url_resolver.split(".")
+        app_name = func_path_lst[1]
+        api_name = func_path_lst[-1]
+        
+    
         # Unpacking request for relevant fields:
-        api_log_database_model.objects.create(
+        api_log = api_log_database_model.objects.create(
             request_user = request.user,
             request_type = request.method, 
-            api_application = request.current_app)
-            
-        api_log_database_model.save()
+            api_app = app_name,
+            api_endpoint= api_name)
+
+        api_log.save()
 
     else:
-        return AttributeError(f"API Ingestion method someone was passed a non-authenticated request!!! from {request.user.get_username()}")
+        raise AttributeError(f"API Ingestion method someone was passed a non-authenticated request!!! from {request.user.get_username()}")
+        
+
+def get_api_throttle_scope(user_groups_lst, api_throttle_rates, throttle_type):
+    """Method searches two lists in O(n) time for an api throttle scope based on
+    the user's Permission Group. This inefficient search is possible due to how
+    short the lists are.
+
+    The method is used by custom throttle object to select the throttle scope for API Views.
+    The method is designed to be used by both a burst and sustained throttle class and as such
+    the "burst" or "sustained" throttle scope is selected via the type param.
+
+    Arguments: 
+        user_groups_lst (list): A list containing all of the Groups the user is apart of. It assumes
+            that their is only one commone element (one relßevant permission group) between this list
+            and api_throttle_rates.
+
+        api_throttle_rates (list): A list containing all of the possible throttle rate scopes extracted
+            from the settings GROUP_THROTTLE_RATES.keys() param in the Throttle class. Only one element
+            from this list will be returned as the appropriate scope.
+
+        throttle_type (str): The type of throttle scope that will be returned if the relevant throttle scopes are 
+            found. It is designed so that the method should select either a "sus" or "burst" scope based
+            on sub-string selection. 
+
+    Returns:
+        string: The name of the selected throttle scope.
+    """
+    # Iterating through all users searching for str of format: "{user_group}_min":
+    for user_group in user_groups_lst:
+        for api_throttle_rate in api_throttle_rates:
+            if user_group and throttle_type in api_throttle_rate:
+                return api_throttle_rate
+                
+            else:
+                pass
+
+

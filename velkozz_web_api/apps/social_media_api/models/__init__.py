@@ -1,2 +1,2 @@
 # Importing reddit models:
-from .reddit.reddit_models import WallStreetBetsPosts, SciencePosts
+from social_media_api.models.reddit.reddit_models import WallStreetBetsPosts, SciencePosts

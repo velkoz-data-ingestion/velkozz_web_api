@@ -59,7 +59,12 @@ class APIRequestLog(models.Model):
     request_user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     request_type = models.CharField(max_length=10)
     request_time = models.DateTimeField(auto_now_add=True)
-    api_application = models.CharField(max_length=100)
+    api_app = models.CharField(max_length=100)
+    api_endpoint = models.CharField(max_length=100)
+
+    class Meta:
+        verbose_name_plural = "API Request Log"
+
 
     def __str__(self):
         return f"{self.request_user}_{self.request_time}_{api_application}"

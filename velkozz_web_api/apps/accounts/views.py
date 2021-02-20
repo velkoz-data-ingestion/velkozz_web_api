@@ -8,6 +8,7 @@ from django.apps import apps
 # DRF Packages:
 from rest_framework.permissions import IsAuthenticated
 from .permissions import HasAPIAccess
+from .throttles import APIBurstUserPermissionGroupsThrottle, APISustainedUserPermissionGroupsThrottle  
 
 # Importing app specific utility:
 from utils.app_management import get_user_api_app_permissions
@@ -26,6 +27,9 @@ class AbstractModelViewSet(viewsets.ModelViewSet):
     """
     # Adding Custom Permissions for the ModelViewSet:
     permission_classes = [IsAuthenticated, HasAPIAccess]
+    
+    # Adding Custom Throttling for the ModelViewSet:
+    throttle_classes = [APIBurstUserPermissionGroupsThrottle, APISustainedUserPermissionGroupsThrottle]
 
 
 def site_main_index(request):

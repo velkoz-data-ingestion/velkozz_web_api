@@ -10,6 +10,7 @@ from django.test import TestCase, Client
 from django.urls import reverse
 from rest_framework.test import APIRequestFactory, force_authenticate
 from rest_framework.request import Request
+from django.contrib.auth.models import Permission
 from django.forms.models import model_to_dict
 
 # Importing a base RedditModel TestCase:
@@ -19,8 +20,8 @@ from .base_social_media_testcases import AbstractRedditModelTestCase
 from accounts.models import CustomUser
 
 # Importing Subreddit Models and Seralizers:
-from ..models.reddit.reddit_models import WallStreetBetsPosts, SciencePosts
-from ..model_views_seralizers.reddit_api.reddit_serializers import WallStreetBetsSerializer, SciencePostsSerializer
+from social_media_api.models.reddit.reddit_models import WallStreetBetsPosts, SciencePosts
+from social_media_api.model_views_seralizers.reddit_api.reddit_serializers import WallStreetBetsSerializer, SciencePostsSerializer
 
 # Importing the Views:
 from ..model_views_seralizers.reddit_api.reddit_views import WallStreetBetsViewSet, SciencePostsViewSet
@@ -31,6 +32,13 @@ class WallStreetBetsPostsTest(AbstractRedditModelTestCase, TestCase):
     to ensure correct data ingestion and reading.
     """
     def setUp(self):
+        # Extending Parent SetUp Method for User and Group creation: 
+        super(WallStreetBetsPostsTest, self).setUp()
+
+        # Adding model specific permissions to the user groups:
+        permissions = Permission.objects.all().filter(name__contains="wall street bets posts")
+        for permission in permissions:
+            self.test_user_free.user_permissions.add(permission)
 
         # Declaring Instance Config Parameter:
         self.RedditModel = WallStreetBetsPosts
@@ -119,6 +127,15 @@ class SciencePostsTest(AbstractRedditModelTestCase, TestCase):
     API to ensure correct data ingestion and reading.
     """
     def setUp(self):
+        
+        # Extending Parent SetUp Method for User and Group creation: 
+        super(SciencePostsTest, self).setUp()
+
+        # Adding model specific permissions to the user groups:
+        permissions = Permission.objects.all().filter(name__contains="science posts")
+        for permission in permissions:
+            self.test_user_free.user_permissions.add(permission)
+
 
         # Declaring Instance Config Parameter:
         self.RedditModel = SciencePosts

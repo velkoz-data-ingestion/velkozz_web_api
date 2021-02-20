@@ -10,13 +10,13 @@ from django.urls import reverse
 from rest_framework.test import APIRequestFactory, force_authenticate
 from rest_framework.request import Request
 from django.forms.models import model_to_dict
+from django.contrib.auth.models import Group
 
 # Importing Account Data Models; 
 from accounts.models import CustomUser
 
 # Declaring global config objects that the Abstract TestCase Uses:
 factory = APIRequestFactory()
-test_user = CustomUser.objects.get(username="matthewteelucksingh")
 
 class AbstractRedditModelTestCase():
     """An Abstract Method that is extended by a TestCase class for testing a
@@ -36,6 +36,32 @@ class AbstractRedditModelTestCase():
     via a bulk_create command or use of the self.RedditModel.create() methods.
 
     """
+    def setUp(self):
+        """Creating custom user with necesary permissions for use in testing:
+        """
+        # Extracting the group objects for API users:
+        free_tier = Group.objects.create(name="api_free_tier")
+        free_tier.save()
+
+        # Assign Permissions to the Group itself.
+
+        #api_professional_tier = Group.objects.get(name="api_professional_tier")
+
+        # Creating users with differing permissions:
+        self.test_user_free = CustomUser.objects.create_user(
+            "test_user_free", "testuser@example.com", "password123")
+        self.test_user_professional = CustomUser.objects.create_user(
+            "test_user_pro", "protestuser@example.com", "password123")
+        
+        self.test_user_free.save()
+        self.test_user_professional.save()
+
+        # Assigning permission groups to users:
+        free_tier.user_set.add(self.test_user_free)
+        #api_professional_tier.user_set.add(test_user_professional)
+
+        
+
     def test_GET_request(self):
         """A boilerplace method that tests the standard GET requet functionality
         of the database.
@@ -51,10 +77,10 @@ class AbstractRedditModelTestCase():
         This ensures that the GET request is sucessfully reading data from
         the database. 
 
-        """
+        """        
         # Performing a GET Request to the endpoint:
         get_request = factory.get(self.api_url, format='json')
-        force_authenticate(user=test_user, request=get_request)
+        force_authenticate(user=self.test_user_free, request=get_request)
 
         # Querying the database for all model instances:
         database_response = self.RedditModel.objects.all()
@@ -152,7 +178,7 @@ class AbstractRedditModelTestCase():
 
         # Performing a POST request to the database via APIFactory:
         post_request = factory.post(self.api_url, data_payload, format="json")
-        force_authenticate(user=test_user, request=post_request)
+        force_authenticate(user=self.test_user_free, request=post_request)
     
         # Extracting content from the API GET request:
         view = self.ModelViewSet.as_view({'post': 'create'})
@@ -164,10 +190,11 @@ class AbstractRedditModelTestCase():
 
         # Extract keys that are returned from the JSON to filter the GET requeust:
         db_model_keys = database_json_response[0].keys()
-
+        
         # Iterating through the list of QueryDicts filtering for only the keys extracted
         # from the database model query:
         get_request = get_response.data 
+
         filtered_get_request = [
             OrderedDict([(key, qset[key]) for key in qset.keys() if key in set(db_model_keys)]) 
             for qset in get_request

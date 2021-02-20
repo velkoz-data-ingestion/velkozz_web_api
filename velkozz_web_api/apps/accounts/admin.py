@@ -3,10 +3,11 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 
 # Importing Custom User Data Model:
-from .models import CustomUser, APIApplication
+from .models import CustomUser, APIApplication, APIRequestLog
 
 # Registering the Custom User Model to the admin dash:
 admin.site.register(CustomUser, UserAdmin)
 
-# Registering the API Services Model to the admin dash:
+# Registering the API Services Models to the admin dash:
 admin.site.register(APIApplication)
+admin.site.register(APIRequestLog)

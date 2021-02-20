@@ -83,6 +83,9 @@ class WallStreetBetsViewSet(AbstractModelViewSet):
         
         return Response(serializer.data)
 
+    class Meta:
+        verbose_name_plural = "WallStreetBets Post"
+
 class SciencePostsViewSet(AbstractModelViewSet):
     """The ViewSet that provides REST API routes for the subreddit WallStreetBets
     post database table.
