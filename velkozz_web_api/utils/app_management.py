@@ -115,6 +115,7 @@ def get_api_throttle_scope(user_groups_lst, api_throttle_rates, throttle_type):
     # Iterating through all users searching for str of format: "{user_group}_min":
     for user_group in user_groups_lst:
         for api_throttle_rate in api_throttle_rates:
+
             if user_group and throttle_type in api_throttle_rate:
                 return api_throttle_rate
                 

@@ -15,7 +15,9 @@ class APIBurstUserPermissionGroupsThrottle(UserRateThrottle):
     """
     - API Throttle makes assumptions about group naming conventions. (Assumes group names relevant to
         api permissions always contain the preface "api").
-
+    
+    
+    TODO: Throttle Class is not user specific. FIND OUT WHY THIS IS AND MAKE IT USER SPECIFIC.
     """
     def __init__(self): 
 
