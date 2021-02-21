@@ -49,9 +49,9 @@ class AbstractRedditModelTestCase():
 
         # Creating users with differing permissions:
         self.test_user_free = CustomUser.objects.create_user(
-            "test_user_free", "testuser@example.com", "password123")
+            "test_user_free_account", "testuser@example.com", "password123")
         self.test_user_professional = CustomUser.objects.create_user(
-            "test_user_pro", "protestuser@example.com", "password123")
+            "test_user_pro_account", "protestuser@example.com", "password123")
         
         self.test_user_free.save()
         self.test_user_professional.save()

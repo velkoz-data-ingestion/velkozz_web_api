@@ -18,6 +18,7 @@ class APIBurstUserPermissionGroupsThrottle(UserRateThrottle):
     
     
     TODO: Throttle Class is not user specific. FIND OUT WHY THIS IS AND MAKE IT USER SPECIFIC.
+        HINT: The user for all the tests has the same name so perhaps its cache id is the same????
     """
     def __init__(self): 
 
@@ -98,7 +99,7 @@ class APISustainedUserPermissionGroupsThrottle(UserRateThrottle):
             # Assigning a throttle rate for the new scope variable:
             self.rate = self.THROTTLE_RATES[self.scope]
             ident = request.user.username
-
+            
         except Exception as e:
             print(e)
 
