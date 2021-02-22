@@ -146,6 +146,14 @@ class PermissionAPIRequestTest(BaseAPITestCase):
         # Testing GET (view) authentication: 
         self.assertEqual(authenticated_response.status_code, 200)
 
+        # Removing User access and testing authentication:
+        self.senior_user.user_permissions.remove(get_wsb_permission)
+        new_unauth_response = self.test_client.get(self.rwsb_api_url)
+
+        # Testing GET (view) authentication: 
+        self.assertEqual(new_unauth_response.status_code, 403)
+
+
         print("\nTesting View (GET) Model Permissions of <HasAPIAccess> DRF Permission Class")
 
     def test_POST_permissions(self):
@@ -172,5 +180,12 @@ class PermissionAPIRequestTest(BaseAPITestCase):
 
         # Testing POST (add) authentication: 
         self.assertEqual(authenticated_response.status_code, 200)
+
+        # Removing User access and testing authentication:
+        self.senior_user.user_permissions.remove(post_wsb_permission)
+        new_unauth_response = self.test_client.post(self.rwsb_api_url)
+
+        # Testing GET (view) authentication: 
+        self.assertEqual(new_unauth_response.status_code, 403)
 
         print("\nTesting Add (POST) Model Permissions of <HasAPIAccess> DRF Permission Class")
