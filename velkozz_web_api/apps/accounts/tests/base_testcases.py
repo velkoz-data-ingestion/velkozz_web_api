@@ -44,7 +44,7 @@ class BaseAPITestCase(TestCase):
         # Extracting the group objects for API users:
         self.api_free_tier = Group.objects.get(name="api_free_tier")
         self.api_professional_tier = Group.objects.get(name="api_professional_tier")
-        self.api_senior_teir = Group.objects.get(name="api_senior_tier")
+        self.api_senior_tier = Group.objects.get(name="api_senior_tier")
         self.api_ingestion = Group.objects.get(name="api_ingestion")
         self.api_developer = Group.objects.get(name="api_developer")
 
@@ -67,7 +67,7 @@ class BaseAPITestCase(TestCase):
         # Assigning permission groups to users:
         self.api_free_tier.user_set.add(self.free_user)
         self.api_professional_tier.user_set.add(self.prof_user)
-        self.api_senior_teir.user_set.add(self.senior_user)
+        self.api_senior_tier.user_set.add(self.senior_user)
         self.api_ingestion.user_set.add(self.ingestion_acc)
         self.api_developer.user_set.add(self.developer)
         

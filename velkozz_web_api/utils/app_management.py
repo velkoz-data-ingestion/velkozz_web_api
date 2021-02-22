@@ -72,14 +72,14 @@ def log_api_request(request, api_log_database_model):
         func_path_lst = url_resolver.split(".")
         app_name = func_path_lst[1]
         api_name = func_path_lst[-1]
-        
-    
+
         # Unpacking request for relevant fields:
         api_log = api_log_database_model.objects.create(
             request_user = request.user,
             request_type = request.method, 
             api_app = app_name,
-            api_endpoint= api_name)
+            api_endpoint= api_name
+        )
 
         api_log.save()
 

@@ -53,6 +53,8 @@ class WallStreetBetsViewSet(AbstractModelViewSet):
         # If Requests Body contains POST data:
         if request.body:
             wsb_posts = json.loads(request.body)
+        else:
+            wsb_posts = {} # Empty Json if no body content.
 
         # Creating a list of WallStreetBetsPosts object from Json data via list comprehension:
         wsb_posts_objects = [

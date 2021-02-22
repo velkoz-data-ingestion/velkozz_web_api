@@ -67,4 +67,4 @@ class APIRequestLog(models.Model):
 
 
     def __str__(self):
-        return f"{self.request_user}_{self.request_time}_{api_application}"
+        return f"APIRequestLog<{self.request_user}_{self.request_time}_{self.api_app}:{self.api_endpoint}>"

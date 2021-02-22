@@ -15,10 +15,7 @@ class APIBurstUserPermissionGroupsThrottle(UserRateThrottle):
     """
     - API Throttle makes assumptions about group naming conventions. (Assumes group names relevant to
         api permissions always contain the preface "api").
-    
-    
-    TODO: Throttle Class is not user specific. FIND OUT WHY THIS IS AND MAKE IT USER SPECIFIC.
-        HINT: The user for all the tests has the same name so perhaps its cache id is the same????
+        
     """
     def __init__(self): 
 
@@ -112,8 +109,6 @@ class APISustainedUserPermissionGroupsThrottle(UserRateThrottle):
         # Implementing the internal throttle validation method:
         base_validation = super(APISustainedUserPermissionGroupsThrottle, self).allow_request(request, view)
 
-        # If the base validation is validated log request:
-        if base_validation == True:
-            log_api_request(request, APIRequestLog)
+        # NOTE: No Logging functionality. The logging is done in the BurstThrottle.
 
         return base_validation
