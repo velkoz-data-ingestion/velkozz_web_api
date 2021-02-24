@@ -25,6 +25,12 @@
     --gray4: #454e56;
     --gray5: #2a2e35;
     --gray6: #12181b;
+    --dark1: #0d1117;
+    --light-grey: #161b22;
+    --color-header-logo: #f0f6fc;
+    --btn-grey-backgroup: #21262d;
+    --btn-grey: #c9d1d9;
+    --btn-grey-border: #8b949e88;
     --nav-width: 4em;
     --font-body: "sofia-pro",sans-serif;
     --font-head: "sofia-pro",sans-serif;
@@ -34,6 +40,8 @@
     --orange-pink: linear-gradient(to bottom right,var(--orange-light),var(--orange-dark) 85%);
     --green-grad: linear-gradient(to bottom right,var(--green-light),var(--green-dark) 85%);
     --background: var(--gray6);
+    --card-color: var(--light-grey);
+    --backgroud_darker: var(--dark1);
     --text-color: var(--gray2);
     --h-color: #fff;
     --nav-shadow: 4px 0 10px -3px #010101;
@@ -50,7 +58,7 @@
 }
 
 body {
-    background: var(--background);
+    background: var(--backgroud_darker);
     color: var(--text-color);
     margin: 0;
     font-family: var(--font-body);
@@ -65,14 +73,12 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background: #353535;
-    color: #fff;
+    background: var(--card-color);
     box-shadow: rgba(20, 3, 19, 0.1) 0px 0.15rem 0.5rem, rgba(2, 8, 20, 0.1) 0px 0.075rem 0.175rem;
     height: 100%;
     width: 100%;
     transition: all 500ms;
     overflow: hidden;
-
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;

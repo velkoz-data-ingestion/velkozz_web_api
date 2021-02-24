@@ -7,6 +7,43 @@
     grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
 }
 
+.main-header {
+    font-size: 3em;
+    text-align: center;
+    padding-bottom: .5em;
+    border-bottom: var(--h-border);
+} 
+
 .user_api_grid div {
-    border-radius: 0.25rem;
+    border-radius: 6px;
+    border: 1px solid;
+    border-color: var(--btn-grey-border);
+}
+
+.card p {
+    padding-left: 1em;
+    padding-right: 1em;
+
+}
+
+.card a {
+    padding: 1em;
+    margin-bottom: 1em;
+}
+
+/* Styling the documentation button: */
+.btn {
+    border-radius: 6px;
+    background-color: var(--btn-grey-backgroup);
+}
+
+.btn, .btn:visited {
+    border: 1px solid !important;
+    border-color: var(--btn-grey-border) !important;
+    text-decoration: none !important;
+    color: var(--btn-grey);
+}
+.btn:hover {
+    box-shadow: rgba(2, 8, 20, 0.1) 0px 0.35em 1.175em, rgba(2, 8, 20, 0.08) 0px 0.175em 0.5em;
+    transform: translateY(-3px) scale(1.1);
 }

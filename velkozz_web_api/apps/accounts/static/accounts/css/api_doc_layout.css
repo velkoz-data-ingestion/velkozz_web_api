@@ -1,0 +1,23 @@
+/* Removing padding for grids: */
+.main-body-content {
+    margin-top: 5rem !important;
+    padding: 0rem !important;
+}
+
+/* Main Grid Styling: */
+.doc-grid {
+    display: grid;
+    grid-template-columns: 0.25fr 0.75fr;
+    grid-template-rows: auto;
+    height: 100vh;
+}
+
+/* Styling the two main grid rows: */
+.grid-col1 {
+    border-right: solid 1px var(--btn-grey-border);
+    padding: 1rem;
+}
+
+.grid-col2 {
+    padding: 1rem;
+}

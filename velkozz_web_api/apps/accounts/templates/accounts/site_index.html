@@ -10,30 +10,28 @@
 {% block body %}
 
     <div class="grid-item-1 main-card">
-        <h1>Velkozz Web Data APIs</h1>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Cupiditate mollitia vero recusandae reprehenderit neque officia excepturi dolorem quibusdam repudiandae rem voluptatem maxime placeat nemo repellendus obcaecati omnis repellat aspernatur minus quae, voluptatibus corporis! Ad, cum expedita, autem commodi veritatis laudantium aliquam minus a exercitationem animi ipsa nisi esse at enim.</p>
+        <h1>Velkozz Data APIs</h1>
+        <p>REST APIs that provide various structured data.</p>
     </div>
     
     <section class="internal-grid">
     <div class="sub-card card">
-        <h2>Browse All Velkozz APIs</h2>
+        <h2>Browse Velkozz APIs</h2>
         <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Impedit exercitationem ipsa possimus dolorem sunt, sed nesciunt, dolor voluptate, corporis alias veniam sit quod harum explicabo.</p>
 
         <section class="two-button-grid">
-            {% if request.user.is_authenticated %}
-            <a class="btn" href="{% url 'user_dashboard' %}">Dashboard</a>
-            {% endif %}
-            <a class="btn">Documentation</a>
+            <a class="btn" href="{% url 'user_dashboard' %}">API Dashboard</a>
+            <a class="btn">User Account</a>
         </section>            
     </div>
     
     <div class="sub-card card">
-        <h2>Create Account or View Your Dashboard</h2>    
+        <h2>For Developers & Active Users</h2>    
         <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Impedit exercitationem ipsa possimus dolorem sunt, sed nesciunt, dolor voluptate, corporis alias veniam sit quod harum explicabo.</p>
 
         <section class="two-button-grid">
-            <a class="btn">Manage Account</a>
-            <a class="btn" href="https://github.com/MatthewTe/velkozz_web_api">Soure Code<img src="{% static 'images/icons/github_icon.png' %}"></a>
+            <a class="btn">External Developer APIs</a>
+            <a class="btn" href="https://github.com/MatthewTe/velkozz_web_api">Velkozz Django Source<img src="{% static 'images/icons/github_icon.png' %}"></a>
         </section>
         
     

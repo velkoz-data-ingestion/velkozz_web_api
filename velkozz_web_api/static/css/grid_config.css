@@ -1,6 +1,6 @@
 /* Header Card Custom Config */
 .header-card {
-    background: #353535;
+    background: var(--light-grey);
     font-size: 3rem;
     box-shadow: rgba(3, 8, 20, 0.1) 0px 0.15rem 0.5rem, rgba(2, 8, 20, 0.1) 0px 0.075rem 0.175rem;
     height: 5rem;
@@ -12,6 +12,7 @@
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
+    color: var(--color-header-logo);
 
 }
 .header-card a {

@@ -20,15 +20,12 @@
     {% block navbar %}
     <div class="header-card">
             <a href="{% url 'main_index' %}">Velkozz REST APIs</a>
-            
+            <a href="{% url 'user_dashboard' %}">API Dashboard</a>
             {# Conditional Displaying A Login or Logout promt based on if a user is logged in: #}
             {% if request.user.is_authenticated == True %}
-                <a href="{% url 'user_dashboard' %}">Your API Dashboard</a>
                 <a href="{% url 'logout' %}?next={% url 'main_index' %}" id="header-login">Logout</a>
-                <a id="icon-format" href="https://github.com/MatthewTe/velkozz_web_api" ><img src="{% static 'images/icons/github_icon.png' %}" alt=""></a>
             {% else %}
-                <a href="{% url 'login' %}" id="header-login">Login</a>
-                <a id="icon-format" href="https://github.com/MatthewTe/velkozz_web_api" ><img src="{% static 'images/icons/github_icon.png' %}" alt=""></a>
+                <a href="{% url 'login_page' %}" id="header-login">Login</a>
             {% endif %}            
     </div> 
     {% endblock navbar %}

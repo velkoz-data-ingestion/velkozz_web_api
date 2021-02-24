@@ -1,0 +1,26 @@
+{% extends "core_layout.html" %}
+{% load static %}
+
+{% block head %}
+    <link rel="stylesheet" href="{% static 'accounts/css/api_doc_layout.css' %}">
+{% endblock head %}
+
+{% block body %}
+
+    <section class="doc-grid">
+
+        <div class=grid-col1>
+            {% block sidebar-content %}
+            <h1>API Content Sidebar</h1>
+            {% endblock sidebar-content %}
+        </div>
+
+        <div class="grid-col2">
+            {% block main-doc-content %}
+            <h1>API DOCUMENTATION</h1>
+            {% endblock main-doc-content %}
+        </div>
+
+    </section>
+
+{% endblock body %}

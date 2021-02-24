@@ -1,0 +1,62 @@
+{% extends 'core_layout.html' %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+
+    {% block head %}
+    <link rel="stylesheet" href="{% static 'accounts/css/login_styling.css' %}">
+    {% endblock head %}
+
+    {% block title %}Velkozz User Login{% endblock title %}
+    
+</head>
+<body>
+
+    {% block navbar %}
+    {% endblock navbar %}
+
+    {% block body %}
+    <article class="card">
+      <header class="card-header">
+        <h2>Velkozz API Login</h2>
+      </header>
+
+        <form role="form" action="{% url 'accountlogin' %}" method="POST">
+        
+          {% csrf_token %}
+          <table>
+            <tr>
+              <td align="right"><label for="username">Username:</label></td>
+              <td align="left"><input type="text" name="username" id="username"></td>
+            </tr>
+            
+            <tr>
+              <td align="right"><label for="password">Password:</label></td>
+              <td align="left"><input type="password" name="password" id="password"></td>
+            </tr>
+
+            <tr>
+              <td colspan="2">
+                <div class="submit-div">
+                  <button class="submit-btn" type="submit">Login</button>
+                </div>
+              </td>
+            </tr>
+          </table>
+
+        </form>
+
+      <div class="card-author">
+      </div>
+      <div class="tags">
+        <a href="#">Forgot your password?</a>
+      </div>
+    </article>
+    {% endblock body %}
+      
+</body>
+</html>
