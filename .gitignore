@@ -63,7 +63,8 @@ db.sqlite3
 db.sqlite3-journal
 
 # Static Files Sub-Dirs for testing:
-finance_api/
+ohlc/
+#static_files/
 #migrations/
 
 # Flask stuff:
