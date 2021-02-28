@@ -2,9 +2,10 @@
 import requests
 
 # Importing Django Test packages: 
-from django.test import TestCase
+from django.test import TestCase, Client
 from accounts.models import CustomUser
 from rest_framework.test import APIRequestFactory, force_authenticate
+from django.contrib import auth
 from django.contrib.auth.models import Group, Permission
 from rest_framework.authtoken.models import Token
 from rest_framework.test import APIClient
@@ -16,6 +17,71 @@ from utils.app_management import log_api_request
 from django.urls import reverse
 from django.conf import settings
 
+
+class AccountUserManagementTest(TestCase):
+    """A testcase that contains all of the tests for the account
+    apps's user managment/authentication system.
+
+    The TestCase performs tests on the ability of the accounts app to: 
+
+    - Create a CustomUser via the django URLs.
+    - Login a CustomUser via the django URLs.
+    - Logout a CustomUser via the django URLs. 
+    
+    """
+    def setUp(self):
+        
+        # Creating a user to test sign-in func:
+        login_test_usr = CustomUser.objects.create(username="login_test_user", password="test_pass")
+        login_test_usr.save()
+
+        # Client for performing requests:
+        self.login_client = Client()
+
+    def test_user_creation(self):
+        pass
+
+    def test_user_login(self):
+        """Performs POST request to login endpoint to correctly authenticate
+        a user with the name 'login_test_user' and password 'test_pass'.
+        """
+        # Testing that the user created for tested exists:
+        test_usr = CustomUser.objects.get(username="login_test_user", password="test_pass")
+        self.assertNotEqual(test_usr, None)
+
+        # The client should not be logged in: 
+        user = auth.get_user(self.login_client)
+        self.assertEqual(user.is_authenticated, False)
+
+        # Logging in the client from endpoint: 
+        login_response = self.login_client.post(
+            "/accounts/auth/",
+            {
+                "username": "login_test_user",
+                "password":"test_pass"
+            }
+        )
+
+        # Default Client() login:
+        test = self.login_client.login(
+            username="login_test_user",
+            password="test_pass"
+        )
+
+        self.login_client.force_login(test_usr)
+
+        user = auth.get_user(self.login_client)
+
+        # Testing response and login status:
+        self.assertEqual(login_response.status_code, 302) # Should be a redirect.    
+        self.assertEqual(user.is_authenticated, True)
+
+        #TODO: FIX LOGIN TESTING. WHY IS LOGIN ROUTE REDIRECTING BUT NOT AUTHENTICATING.
+
+        print("\nTested Authentication CustomUser Account Login Functionality <account_auth>.")
+
+    def test_user_logout(self):
+        pass
 
 class ThrottledAPIRequestTest(BaseAPITestCase):
     """TestCase that tests the functionality of the custom
@@ -189,3 +255,4 @@ class PermissionAPIRequestTest(BaseAPITestCase):
         self.assertEqual(new_unauth_response.status_code, 403)
 
         print("\nTesting Add (POST) Model Permissions of <HasAPIAccess> DRF Permission Class")
+

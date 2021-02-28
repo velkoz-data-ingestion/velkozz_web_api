@@ -153,13 +153,15 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = 'static/'
 # Adding a global static directory to the app: 
 STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
+
+# Development MEDIA_ROOT for static files:
+MEDIA_ROOT = "static_files/"
 
 # Pointing to the Custom User Model:
 AUTH_USER_MODEL = "accounts.CustomUser"

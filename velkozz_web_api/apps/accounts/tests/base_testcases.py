@@ -70,7 +70,6 @@ class BaseAPITestCase(TestCase):
         self.api_senior_tier.user_set.add(self.senior_user)
         self.api_ingestion.user_set.add(self.ingestion_acc)
         self.api_developer.user_set.add(self.developer)
-        
 
         # Creating Authentication Tokens for each user:
         for user in CustomUser.objects.all():

@@ -2,8 +2,11 @@
 from django.urls import include, path
 from rest_framework import routers
 
-# Importing the Market Index Composition Views from the Reddit MVC:
+# Importing the Market Index Composition Views from the Market Index MVC:
 from .model_views_seralizers.market_index import market_indicies_views
+
+# Importing the Security OHLC Views from the Securities Data MVC:
+from .model_views_seralizers.securities_pricing import securities_pricing_views
 
 # Creating Url Router:
 router = routers.DefaultRouter()
@@ -15,6 +18,9 @@ router.register(r"market_index/sptsxcomp", market_indicies_views.SPTSXIndexCompo
 router.register(r"market_index/ftse100comp", market_indicies_views.FTSE100IndexCompositionViewSet)
 router.register(r"market_index/smicomp", market_indicies_views.SMICompositionViewSet)
 router.register(r"market_index/spicomp", market_indicies_views.SPICompositionViewSet)
+
+# Registering the Securities Data API Routes:
+router.register(r"securities/ohlc_timeseries", securities_pricing_views.SecuritiesPriceOHLCViewSet)
 
 # Creating Automatic URL Routing:
 urlpatterns = router.urls
