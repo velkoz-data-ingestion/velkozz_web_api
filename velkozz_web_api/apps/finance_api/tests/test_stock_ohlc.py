@@ -144,7 +144,8 @@ class SecurityOHLCAPITestCase(BaseAPITestCase):
 
         # Asserting that the GET request was validated:
         self.assertEqual(get_response.status_code, 200)
+        self.assertEqual(list(get_response.data.keys()), ["Ticker", "OHLC_TimeSeries"])
+        self.assertEqual(get_response.data["Ticker"], "AAPL")
+        # TODO: Test that the Dict Recieved was accurate.
 
-        print(get_response.data)
-
-
+        print("Performed GET Request Test to Finance API <SecuritiesPriceOHLCViewSet> w/ OHLC data")

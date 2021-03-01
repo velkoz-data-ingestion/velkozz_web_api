@@ -34,13 +34,30 @@ class SecuritiesPriceOHLCViewSet(AbstractModelViewSet):
         # Extracting the Query Parameters from the request:
         if "ticker" in request.GET:
             ticker = request.GET["Ticker"]
-    
+
+        if ticker is None:
+            return Response("Must Provide A Ticker Symbol for OHLC Data")
+
         # Querying the database for the ohlc price via ticker:
         ohlc_security = SecurityPriceOHLC.objects.get(security_ticker=ticker)
 
-        print(ohlc_security.price_ohlc)
+        # Converting the price history timeseries to pandas dataframe:
+        ohlc_df = pd.read_csv(ohlc_security.price_ohlc, index_col="DateTime") 
 
-        return Response(request.data)
+        # Dataframe to JSON response:
+        ohlc_json = ohlc_df.to_json(orient="index")
+        
+        # Creating JSON to return via post:
+        response_payload = {
+            "Ticker": ticker,
+            "OHLC_TimeSeries": ohlc_json
+            }
+
+        # Formatting to JSON:
+        json_payload = json.dumps(response_payload)
+        loaded_payload = json.loads(json_payload)
+        
+        return Response(loaded_payload)
         
 
     def create(self, request):
@@ -89,9 +106,12 @@ class SecuritiesPriceOHLCViewSet(AbstractModelViewSet):
             ohlc_df = pd.DataFrame.from_dict(
                 security["OHLC_TimeSeries"], orient="index")
 
+            # Formatting the csv dataframe:
+            ohlc_df = ohlc_df.round(2)
+
             # Converting the dataframe for temporary csv file:
             temp_path = f"{security['Ticker']}_ohlc.csv"
-            ohlc_df.to_csv(temp_path, index=True)
+            ohlc_df.to_csv(temp_path, index=True, index_label="DateTime")
 
             # Creating/Inserting an instance of SecurityPriceOHLC:
             with open(temp_path, "rb") as temp_csv:
