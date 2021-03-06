@@ -21,6 +21,14 @@
     <div class="header-card">
             <a href="{% url 'main_index' %}">Velkozz REST APIs</a>
             <a href="{% url 'user_dashboard' %}">API Dashboard</a>
+            
+            {# Conditional Displaying a User Dashboard or Create User Dashboard if a user is logged in #}
+            {% if request.user.is_authenticated == True %}
+                <a href="{% url 'user_account_dashboard' %}" id="">Account API Dashboard</a>
+            {% else %}
+                <a href="{% url 'create_account_page' %}" id="">Create Account</a>
+            {% endif %}
+
             {# Conditional Displaying A Login or Logout promt based on if a user is logged in: #}
             {% if request.user.is_authenticated == True %}
                 <a href="{% url 'logout' %}?next={% url 'main_index' %}" id="header-login">Logout</a>

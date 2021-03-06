@@ -35,11 +35,10 @@ class AbstractModelViewSet(viewsets.ModelViewSet):
     # Adding Custom Throttling for the ModelViewSet:
     throttle_classes = [APIBurstUserPermissionGroupsThrottle, APISustainedUserPermissionGroupsThrottle]
 
-
+# Main Frontend views:
 def site_main_index(request):
     context = {}
     return render(request, "accounts/site_index.html", context)
-
 
 def account_index(request):
     context = {}
@@ -55,6 +54,14 @@ def account_index(request):
     context["api_permissions"] = available_api_apps
 
     return render(request, "accounts/account_index.html", context)
+
+def account_dashboard(request):
+    """The view for the user account dashboard.
+    """
+    # Creating an empty context to be populated:
+    context = {}
+    
+    return render(request, 'accounts/user_account_dashboard.html', context=context)
 
 # API Documentation views:
 def api_docs(request, api_name):
@@ -77,10 +84,16 @@ def api_docs(request, api_name):
 
     return render(request, api_doc_dict[api_name])
 
+# User Management views:
 def account_login(request):
     """View that hosts the custom login page for users
     """
     return render(request, "accounts/login.html")
+
+def account_create(request):
+    """View that renders the custom user creation page.
+    """
+    return render(request, "accounts/create_account_form.html")
 
 def account_auth(request):
     """Custom login method that overwrites django defaul login route

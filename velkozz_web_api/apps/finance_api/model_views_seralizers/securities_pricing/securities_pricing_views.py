@@ -22,14 +22,26 @@ import json
 from io import StringIO
 
 class SecuritiesPriceOHLCViewSet(AbstractModelViewSet):
-    """
-    TODO: Add Documentation.
+    """The ViewSets providing the REST API routes for the SecuritiesOHLC Prices
+    database table.
     """
     queryset = SecurityPriceOHLC.objects.all()
 
     def list(self, request, ticker=None):
-        """
-        TODO: Add Documentation
+        """The ViewSet method that processes GET requests made to the
+        SecuritiesPriceOHLC API. 
+
+        The method queries the database for data relating to the price
+        timeseries .csv files according to the GET url params. Once the
+        data has been sucessfully queried it is seralized into a JSON object
+        and returned as an HTTP response object.  
+        
+        Arguments:
+            ticker (None | string): A URL param used to specify the security
+                being queried. A required parameter.
+            
+            TODO: Add Start-Date and End-Date filtering.
+
         """
         # Extracting the Query Parameters from the request:
         if "ticker" in request.GET:
@@ -62,9 +74,9 @@ class SecuritiesPriceOHLCViewSet(AbstractModelViewSet):
 
     def create(self, request):
         """Method manually performs the data ingestion for security 
-        ohlc timeseries. 
+        ohlc timeseries for the SecuritiesPriceOHLC API. 
 
-        The method takes pre-formatted data from a POST request  in the format:
+        The method takes pre-formatted JSON data from a POST request  in the format:
         [
             {
             "Ticker": "XXXX",
@@ -85,7 +97,15 @@ class SecuritiesPriceOHLCViewSet(AbstractModelViewSet):
         ]
 
         It converts this JSON data into a pandas dataframe which is formatted correctly and then converted
-        into a csv file which is ingested into the appropriate Django FileField. 
+        into a csv file which is ingested into the appropriate Django FileField. The method overwrites any existing
+        csv data with the same "Ticker" parameter.
+
+        TODO:
+            * Add data validation for "OHLC_TimeSeries" parameter to enusre correct format.
+            * Look to migrating ingestion/json seralization to a dedicated ModelViewSeralzier if csv conversion
+                can be ported. 
+            * Explore other methods of storing and retrieving timeseries data. Measure read/write speeds and see
+                if dedicated db like InflixDB or TimeScale is a better storage method. 
 
         Notes: 
             This method does not perform data validation, it assumes data validation. It should be replaced by

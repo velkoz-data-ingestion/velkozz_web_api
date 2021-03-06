@@ -148,4 +148,4 @@ class SecurityOHLCAPITestCase(BaseAPITestCase):
         self.assertEqual(get_response.data["Ticker"], "AAPL")
         # TODO: Test that the Dict Recieved was accurate.
 
-        print("Performed GET Request Test to Finance API <SecuritiesPriceOHLCViewSet> w/ OHLC data")
+        print("\nPerformed GET Request Test to Finance API <SecuritiesPriceOHLCViewSet> w/ OHLC data")
