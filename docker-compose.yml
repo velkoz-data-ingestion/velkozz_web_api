@@ -1,0 +1,8 @@
+services:
+  api:
+    build: .
+    container_name: velkozz_api
+    env_file: 
+      - .env.local_prod
+    ports:
+      - "8000:8000"
