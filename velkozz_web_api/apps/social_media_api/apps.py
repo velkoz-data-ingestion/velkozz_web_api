@@ -11,6 +11,7 @@ class SocialMediaAPIConfig(AppConfig):
         """Upon startup writes MetaData about the Social Media API
          to the APIApplication database table.
         """
+        """
         # Importing API Applications Database Model:
         from accounts.models import APIApplication
         
@@ -21,6 +22,6 @@ class SocialMediaAPIConfig(AppConfig):
                 'app_description' : self.app_description
             }
         )
-        
+        """        
 
 

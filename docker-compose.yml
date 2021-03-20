@@ -1,8 +1,35 @@
 services:
   api:
     build: .
+    depends_on:
+      - psql_db
     container_name: velkozz_api
+    networks:
+      - velkozz-api-network      
     env_file: 
-      - .env.local_prod
+      - local_prod.env
+      - prod_db.env
     ports:
       - "8000:8000"
+  
+  psql_db:
+    image: postgres
+    container_name: velkoz_psql_backend
+    restart: always
+    networks:
+      - velkozz-api-network
+    env_file:
+      - prod_db.env
+      - local_prod.env
+    ports:
+      - "5432:5432"
+    volumes: 
+       # Persist the data between container invocations
+       - ./api_psql:/var/lib/postgresql/data
+       
+       # SQL Script that creates the databases necessary for the velkoz_api:
+       #- ./scripts/create_db.sql:/docker-entrypoint-initdb.d/create_db.sql
+
+# Network configuration for API service: 
+networks:
+  velkozz-api-network: 

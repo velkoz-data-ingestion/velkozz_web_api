@@ -10,6 +10,7 @@ class FinanceApiConfig(AppConfig):
         """Upon startup writes MetaData about the Finance Data API
          to the APIApplication database table.
         """
+        """
         # Importing the API Applications data model:
         from accounts.models import APIApplication
 
@@ -20,3 +21,4 @@ class FinanceApiConfig(AppConfig):
                 'app_description' : self.app_description
             }
         )
+        """

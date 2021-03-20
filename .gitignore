@@ -6,6 +6,9 @@ __pycache__/
 # C extensions
 *.so
 
+# Docker Config Stuff:
+/api_psql 
+
 # Distribution / packaging
 .Python
 build/
