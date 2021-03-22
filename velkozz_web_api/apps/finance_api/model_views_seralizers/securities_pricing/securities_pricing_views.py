@@ -19,7 +19,8 @@ import pandas as pd
 import csv
 import os
 import json
-from io import StringIO
+from io import StringIO, BytesIO
+import base64
 
 class SecuritiesPriceOHLCViewSet(AbstractModelViewSet):
     """The ViewSets providing the REST API routes for the SecuritiesOHLC Prices
@@ -39,25 +40,33 @@ class SecuritiesPriceOHLCViewSet(AbstractModelViewSet):
         Arguments:
             ticker (None | string): A URL param used to specify the security
                 being queried. A required parameter.
-            
+
             TODO: Add Start-Date and End-Date filtering.
 
         """
         # Extracting the Query Parameters from the request:
         if "ticker" in request.GET:
-            ticker = request.GET["Ticker"]
+            ticker = request.GET["ticker"]
 
         if ticker is None:
-            return Response("Must Provide A Ticker Symbol for OHLC Data")
+            return Response(
+                {"Error Message":"Must Provide A Ticker Symbol for OHLC Data"})
+
+        # Extracting URL params used to specify OHLC search:
+        start_date = request.GET.get("Start-Date", None)
+        end_date = request.GET.get("End-Date", None)
 
         # Querying the database for the ohlc price via ticker:
         ohlc_security = SecurityPriceOHLC.objects.get(security_ticker=ticker)
 
         # Converting the price history timeseries to pandas dataframe:
-        ohlc_df = pd.read_csv(ohlc_security.price_ohlc, index_col="DateTime") 
+        ohlc_df = pd.read_csv(ohlc_security.price_ohlc, index_col="Date") 
+
+        # Filtering the ohlc_df based on start and end parameters:
+        ohlc_df_filtered = ohlc_df[start_date:end_date] 
 
         # Dataframe to JSON response:
-        ohlc_json = ohlc_df.to_json(orient="index")
+        ohlc_json = ohlc_df_filtered.to_json(orient="index")
         
         # Creating JSON to return via post:
         response_payload = {
@@ -76,29 +85,10 @@ class SecuritiesPriceOHLCViewSet(AbstractModelViewSet):
         """Method manually performs the data ingestion for security 
         ohlc timeseries for the SecuritiesPriceOHLC API. 
 
-        The method takes pre-formatted JSON data from a POST request  in the format:
-        [
-            {
-            "Ticker": "XXXX",
-            "OHLC_TimeSeries": {
-                date1: {"Open": x, "High": x, "Low": x, "Close": x. "Dividends": x, "Stock Splits": x},
-                date2: {"Open": x, "High": x, "Low": x, "Close": x. "Dividends": x, "Stock Splits": x},
-                date3: {"Open": x, "High": x, "Low": x, "Close": x. "Dividends": x, "Stock Splits": x}
-                }
-            },
-            {
-            "Ticker": "YYYY",
-            "OHLC_TimeSeries": {
-                date1: {"Open": x, "High": x, "Low": x, "Close": x. "Dividends": x, "Stock Splits": x},
-                date2: {"Open": x, "High": x, "Low": x, "Close": x. "Dividends": x, "Stock Splits": x},
-                date3: {"Open": x, "High": x, "Low": x, "Close": x. "Dividends": x, "Stock Splits": x}
-                }
-            }
-        ]
+        The method recives JSON data of a price history timeseries csv file encoded in base64. It 
+        converts this base64 string into a csv file, which is then read to the database and stored
+        via the custom File System Storag class.
 
-        It converts this JSON data into a pandas dataframe which is formatted correctly and then converted
-        into a csv file which is ingested into the appropriate Django FileField. The method overwrites any existing
-        csv data with the same "Ticker" parameter.
 
         TODO:
             * Add data validation for "OHLC_TimeSeries" parameter to enusre correct format.
@@ -112,36 +102,40 @@ class SecuritiesPriceOHLCViewSet(AbstractModelViewSet):
             a DRF seralizer.
             
         """
-        # Extracting POST request data:
-        if request.body:
-            post_data = json.loads(request.body)
+        # Decoding the request body into params:
+        body_unicode = request.body.decode('utf-8')
+        body = json.loads(body_unicode)
         
-        else:
+        ticker = body.get("ticker", None)
+        encoded_ohlc = body.get("ohlc", None)
+
+        if ticker is None:
             return Response({"Response":"No POST data found in request.body"})
 
+        # Decoding the Base64 string:
+        decoded_ohlc = base64.b64decode(encoded_ohlc)
 
-        # Parsing the POST data and creating a .csv file:
-        for security in post_data:
-            
-            ohlc_df = pd.DataFrame.from_dict(
-                security["OHLC_TimeSeries"], orient="index")
+        # Converting the decoded string to a pandas dataframe:
+        ohlc_in_memory = StringIO(decoded_ohlc.decode('utf-8'))
+        ohlc_df = pd.read_csv(ohlc_in_memory, sep=",", index_col="Date")
 
-            # Formatting the csv dataframe:
-            ohlc_df = ohlc_df.round(2)
+        # Formatting the csv dataframe:
+        ohlc_df = ohlc_df.round(2)
 
-            # Converting the dataframe for temporary csv file:
-            temp_path = f"{security['Ticker']}_ohlc.csv"
-            ohlc_df.to_csv(temp_path, index=True, index_label="DateTime")
+        # Converting the dataframe for temporary csv file:
+        temp_path = f"{ticker}_ohlc.csv"
+        ohlc_df.to_csv(temp_path, index=True, index_label="Date")
 
-            # Creating/Inserting an instance of SecurityPriceOHLC:
-            with open(temp_path, "rb") as temp_csv:
-        
-                price_ohlc = SecurityPriceOHLC.objects.update_or_create(
-                    security_ticker = security["Ticker"],
-                    defaults = {'price_ohlc': File(temp_csv)},
+        # Creating/Inserting an instance of SecurityPriceOHLC:
+        with open(temp_path, "rb") as temp_csv:
+            price_ohlc = SecurityPriceOHLC.objects.update_or_create(
+                security_ticker = ticker,
+                defaults = {'price_ohlc': File(temp_csv)}
                 )
                 
-            # Destroying the temporary csv:
-            os.remove(temp_path)
+        # Destroying the temporary csv:
+        os.remove(temp_path)
 
-        return Response(post_data)
+        return Response({
+            "Ticker": ticker,
+            "OHLC": decoded_ohlc})

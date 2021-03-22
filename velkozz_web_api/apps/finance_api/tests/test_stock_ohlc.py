@@ -17,6 +17,7 @@ from finance_api.model_views_seralizers.securities_pricing.securities_pricing_vi
 # Importing external packages:
 import pandas as pd
 import yfinance as yf
+import base64
 import json
 
 class SecurityOHLCAPITestCase(BaseAPITestCase):
@@ -44,11 +45,9 @@ class SecurityOHLCAPITestCase(BaseAPITestCase):
         self.xom_ohlc = yf.Ticker("XOM").history(period="max")
 
         # Converting the pandas dataframe to JSON format:
-        self.aapl_result = self.aapl_ohlc.to_json(orient="index")
-        self.json_parsed_aapl = json.loads(self.aapl_result)
+        self.aapl_b64 = base64.b64encode(self.aapl_ohlc.to_csv().encode("utf-8"))
         
-        self.msft_result = self.msft_ohlc.to_json(orient="index")
-        self.json_parsed_msft = json.loads(self.msft_result)
+        self.msft_b64 = base64.b64encode(self.msft_ohlc.to_csv().encode("utf-8"))
 
         # Defining the custom API endpoint:
         self.ohlc_endpoint = "/finance_api/securities/ohlc_timeseries/"
@@ -74,12 +73,10 @@ class SecurityOHLCAPITestCase(BaseAPITestCase):
         self.assertEqual(len(empty_queryset), 0)
 
         # Creating data payload:
-        data_payload = [
-            {
-                "Ticker" : "AAPL",
-                "OHLC_TimeSeries" : self.json_parsed_aapl
+        data_payload = {
+                "ticker" : "AAPL",
+                "ohlc" : self.aapl_b64
             }
-        ]
 
         # Performing POST request to the viewset:
         post_request = self.api_client.post(self.ohlc_endpoint, data_payload, format="json")
@@ -98,7 +95,7 @@ class SecurityOHLCAPITestCase(BaseAPITestCase):
         self.assertEqual(len(ohlc_queryset), 1)
 
         # Ensuring Correct data was written to db:
-        self.assertEqual(ohlc_queryset[0].security_ticker, data_payload[0]["Ticker"])
+        self.assertEqual(ohlc_queryset[0].security_ticker, data_payload["ticker"])
         self.assertEqual(
             ("csv" in ohlc_queryset[0].price_ohlc.name), True)
 
@@ -118,12 +115,11 @@ class SecurityOHLCAPITestCase(BaseAPITestCase):
         self.assertEqual(len(empty_queryset), 0)
 
         # Creating data payload:
-        data_payload = [
-            {
-                "Ticker" : "AAPL",
-                "OHLC_TimeSeries" : self.json_parsed_aapl
+        data_payload = {
+                "ticker" : "AAPL",
+                "ohlc" : self.aapl_b64
             }
-        ]
+        
 
         # Performing POST request to the viewset:
         post_request = self.api_client.post(self.ohlc_endpoint, data_payload, format="json")
@@ -146,6 +142,7 @@ class SecurityOHLCAPITestCase(BaseAPITestCase):
         self.assertEqual(get_response.status_code, 200)
         self.assertEqual(list(get_response.data.keys()), ["Ticker", "OHLC_TimeSeries"])
         self.assertEqual(get_response.data["Ticker"], "AAPL")
+        
         # TODO: Test that the Dict Recieved was accurate.
 
         print("\nPerformed GET Request Test to Finance API <SecuritiesPriceOHLCViewSet> w/ OHLC data")

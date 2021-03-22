@@ -14,7 +14,7 @@ SECRET_KEY = 'k7mll44^7sz(k!ctb5*llxr1uettxe&yv(&fh#dr+(1ua-8%_k'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["0.0.0.0", "127.0.0.1"]
+ALLOWED_HOSTS = []
 
 # Url Path for Login Redirect:
 LOGIN_REDIRECT_URL = '/'
