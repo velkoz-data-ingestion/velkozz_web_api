@@ -11,6 +11,7 @@ router = routers.DefaultRouter()
 # Registering Reddit API routes:
 router.register(r"reddit/rwallstreetbets", reddit_views.WallStreetBetsViewSet)
 router.register(r"reddit/rscience", reddit_views.SciencePostsViewSet)
+router.register(r"reddit/rworldnews", reddit_views.WorldNewsViewSet)
 
 # Creating Automatic URL Routing:
 urlpatterns = router.urls

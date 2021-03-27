@@ -142,3 +142,25 @@ class SciencePosts(RedditPosts):
         abstract = False
         ordering = ['created_on']
   
+class WorldNewsPosts(RedditPosts):
+    """The Model Method that represents the data table
+    meant to store Reddit Posts from the subreddit 'r/worldnews'.
+
+    The model inherits from the RedditPosts abstract model class
+    with the additional parameter 'subreddit' meant to indicate the subreddit
+    that the post comes from.
+
+    Attributes:
+
+        subreddit (models.CharField): The name of the subreddit where the posts are
+            extracted from. Default and Non-Editable the field is set to value "science".
+    """
+    subreddit = models.CharField(
+        max_length=200,
+        default="world_news",
+        editable= False)
+
+    class Meta(RedditPosts.Meta):
+        verbose_name_plural = "World News Subreddit Posts"
+        abstract = False
+        ordering = ['created_on']

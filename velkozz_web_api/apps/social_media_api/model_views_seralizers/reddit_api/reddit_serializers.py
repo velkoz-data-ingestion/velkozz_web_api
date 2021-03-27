@@ -2,7 +2,7 @@
 from rest_framework import serializers
 
 # Importing Database models:
-from social_media_api.models.reddit.reddit_models import WallStreetBetsPosts, SciencePosts
+from social_media_api.models.reddit.reddit_models import WallStreetBetsPosts, SciencePosts, WorldNewsPosts
 
 # Abstract Serializer Objects:
 class RedditPostsSerializer(serializers.HyperlinkedModelSerializer):
@@ -15,6 +15,7 @@ class RedditPostsSerializer(serializers.HyperlinkedModelSerializer):
         super(RedditPostsSerializer, self).__init__(many=many, *args, **kwargs)
 
     class Meta:
+        model = None
         fields = "__all__"
 
 # Reddit Posts Serializers:

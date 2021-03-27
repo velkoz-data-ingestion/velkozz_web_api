@@ -67,7 +67,6 @@ db.sqlite3-journal
 
 # Static Files Sub-Dirs for testing:
 ohlc/
-#static_files/
 #migrations/
 
 # Flask stuff:
