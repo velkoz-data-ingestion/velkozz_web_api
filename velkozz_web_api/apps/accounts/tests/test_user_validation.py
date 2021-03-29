@@ -17,7 +17,6 @@ from utils.app_management import log_api_request
 from django.urls import reverse
 from django.conf import settings
 
-
 class AccountUserManagementTest(TestCase):
     """A testcase that contains all of the tests for the account
     apps's user managment/authentication system.
@@ -42,14 +41,14 @@ class AccountUserManagementTest(TestCase):
         pass
 
     def test_user_login(self):
-        """Performs POST request to login endpoint to correctly authenticate
+        """Performs POST request to login endpoint to  authenticate
         a user with the name 'login_test_user' and password 'test_pass'.
         """
         # Testing that the user created for tested exists:
         test_usr = CustomUser.objects.get(username="login_test_user", password="test_pass")
         self.assertNotEqual(test_usr, None)
 
-        # The client should not be logged in: 
+        # The client should not be logged in: correctly
         user = auth.get_user(self.login_client)
         self.assertEqual(user.is_authenticated, False)
 
@@ -74,6 +73,7 @@ class AccountUserManagementTest(TestCase):
 
         # Testing response and login status:
         self.assertEqual(login_response.status_code, 302) # Should be a redirect.    
+
         self.assertEqual(user.is_authenticated, True)
 
         #TODO: FIX LOGIN TESTING. WHY IS LOGIN ROUTE REDIRECTING BUT NOT AUTHENTICATING.
@@ -194,6 +194,7 @@ class PermissionAPIRequestTest(BaseAPITestCase):
         """
         # Authenticating the APICilent for the professional tier user:
         user_token = Token.objects.get(user=self.senior_user)
+
         self.test_client.credentials(HTTP_AUTHORIZATION=f'Token {user_token.key}')
 
         # Extracting the permissions for the WallStreetBets Model:
@@ -207,6 +208,7 @@ class PermissionAPIRequestTest(BaseAPITestCase):
 
         # Giving the professional user view permission/access to the WallStreetBets Model:
         self.senior_user.user_permissions.add(get_wsb_permission)
+
         authenticated_response = self.test_client.get(self.rwsb_api_url)
 
         # Testing GET (view) authentication: 

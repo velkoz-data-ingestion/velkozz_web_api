@@ -63,7 +63,7 @@ class AbstractRedditModelTestCase():
         
 
     def test_GET_request(self):
-        """A boilerplace method that tests the standard GET requet functionality
+        """A boilerplace method that tests the standard GET request functionality
         of the database.
         
         If additonaly functionality needs to be added to this method such as 
@@ -85,7 +85,7 @@ class AbstractRedditModelTestCase():
         # Querying the database for all model instances:
         database_response = self.RedditModel.objects.all()
         database_json_response = list(database_response.values())
-
+        print("Database JSON Response",database_json_response, "\n\n\n")
         # Extract keys that are returned from the JSON to filter the GET requeust:
         db_model_keys = database_json_response[0].keys()
 
@@ -96,6 +96,7 @@ class AbstractRedditModelTestCase():
         # Iterating through the list of QueryDicts filtering for only the keys extracted
         # from the database model query:
         get_request = get_response.data 
+        print("GET response DATA:",get_response.data, "\n\n\n")
         filtered_get_request = [
             OrderedDict([(key, qset[key]) for key in qset.keys() if key in set(db_model_keys)]) 
             for qset in get_request
@@ -150,7 +151,7 @@ class AbstractRedditModelTestCase():
                 "author_gold" : False,
                 "mod_status" : False,
                 "verified_email_status" : True,
-                "permalink" : "/r/wallstreetbets/comments/lfs22f/why_ill_never_stop_buying_gme_and_why_you/",
+                "link" : "/r/wallstreetbets/comments/lfs22f/why_ill_never_stop_buying_gme_and_why_you/",
                 "author" : "A_test_author",
                 "acc_created_on" : "2019-08-20T02:31:19Z",
                 "comment_karma" : 2504
@@ -169,7 +170,7 @@ class AbstractRedditModelTestCase():
                 "author_gold" : False,
                 "mod_status" : False,
                 "verified_email_status" : True,
-                "permalink" : "/r/wallstreetbets/comments/lfs22f/why_ill_never_stop_buying_gme_and_why_you/",
+                "link" : "/r/wallstreetbets/comments/lfs22f/why_ill_never_stop_buying_gme_and_why_you/",
                 "author" : "A_test_author",
                 "acc_created_on" : "2019-08-20T02:31:19Z",
                 "comment_karma" : 2504
@@ -185,7 +186,7 @@ class AbstractRedditModelTestCase():
         get_response = view(post_request)
 
         # Querying the database for all model instances:
-        database_response = self.RedditModel.objects.all()
+        database_response = self.RedditModel.objects.all().order_by("created_on")
         database_json_response = list(database_response.values())
 
         # Extract keys that are returned from the JSON to filter the GET requeust:

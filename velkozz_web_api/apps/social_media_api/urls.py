@@ -8,10 +8,12 @@ from .model_views_seralizers.reddit_api import reddit_views
 # Creating Url Router:
 router = routers.DefaultRouter()
 
-# Registering Reddit API routes:
-router.register(r"reddit/rwallstreetbets", reddit_views.WallStreetBetsViewSet)
-router.register(r"reddit/rscience", reddit_views.SciencePostsViewSet)
-router.register(r"reddit/rworldnews", reddit_views.WorldNewsViewSet)
+# Extracting a list of all ModelViewSet objects by extracting all the subclasses of parent object: 
+subreddit_viewsets = reddit_views.RedditPostViewSet.__subclasses__()
+
+# Iterating over each ModelViewSet dynamically registering routes to the router:
+for viewset in subreddit_viewsets:
+    router.register(fr"reddit/r{viewset.init_model.subreddit_name}", viewset)
 
 # Creating Automatic URL Routing:
 urlpatterns = router.urls

@@ -122,4 +122,3 @@ def get_api_throttle_scope(user_groups_lst, api_throttle_rates, throttle_type):
             else:
                 pass
 
-

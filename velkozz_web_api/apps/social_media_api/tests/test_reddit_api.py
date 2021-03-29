@@ -217,4 +217,3 @@ class SciencePostsTest(AbstractRedditModelTestCase, TestCase):
             author_created = "2019-08-20T02:31:19Z",
             comment_karma = 2504)
         ])
-
