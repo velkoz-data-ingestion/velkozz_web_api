@@ -63,7 +63,7 @@ class RedditPosts(models.Model):
         db_index= True,
         primary_key=True) 
 
-    title = models.CharField(max_length= 300)
+    title = models.CharField(max_length= 300, null=True)
     content = models.TextField(null=True)
     upvote_ratio = models.FloatField(null=True)
     score = models.IntegerField(null=True)
@@ -84,8 +84,8 @@ class RedditPosts(models.Model):
         null=True
     )
 
-    author = models.CharField(max_length=300)
-    author_created = models.DateTimeField()
+    author = models.CharField(max_length=300, null=True)
+    author_created = models.DateTimeField(null=True)
     comment_karma = models.IntegerField(null=True)
 
     class Meta:

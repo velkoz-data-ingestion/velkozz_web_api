@@ -75,9 +75,9 @@ class IndiaPostsSerializer(RedditPostsSerializer):
     class Meta(RedditPostsSerializer.Meta):
         model = reddit_models.IndiaPosts
 
-class LiberalPostsSerializer(RedditPostsSerializer):
+class LibertarianPostsSerializer(RedditPostsSerializer):
     class Meta(RedditPostsSerializer.Meta):
-        model = reddit_models.LiberalPosts
+        model = reddit_models.LibertarianPosts
 
 class ConservativePostsSerializer(RedditPostsSerializer):
     class Meta(RedditPostsSerializer.Meta):
