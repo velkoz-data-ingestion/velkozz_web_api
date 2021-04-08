@@ -14,7 +14,7 @@ SECRET_KEY = os.environ['SECRET_KEY']
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["0.0.0.0", "127.0.0.1", "localhost"]
+ALLOWED_HOSTS = ["0.0.0.0", "127.0.0.1", "localhost", "web-api"]
 
 # Url Path for Login Redirect:
 LOGIN_REDIRECT_URL = '/'
@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "rest_framework.authtoken",
     "rest_auth",
+    "request",
     
     # Local Applications: 
     # The Custom User Accounts Application:
@@ -51,6 +52,7 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'request.middleware.RequestMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
@@ -88,6 +90,15 @@ DATABASES = {
         'HOST': "psql_db",
         'PORT': os.environ["POSTGRES_PORT"]
 
+    },
+
+    'request' : {
+        'ENGINE':'django.db.backends.postgresql',
+        'NAME':os.environ["TIMESCALE_DB"],
+        'USER':os.environ["TIMESCALE_USER"],
+        'PASSWORD':os.environ["TIMESCALE_PASSWORD"],
+        'HOST': "timescale_db",
+        'PORT': os.environ["TIMESCALE_PORT"]
     }
 }
 

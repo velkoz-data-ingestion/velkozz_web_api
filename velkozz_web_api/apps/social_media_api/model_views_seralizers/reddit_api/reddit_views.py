@@ -177,8 +177,8 @@ class IndiaPostsViewSet(RedditPostViewSet):
     init_model = serializer_class.Meta.model
     queryset = init_model.objects.all().order_by("created_on")
 
-class LiberalPostsViewSet(RedditPostViewSet):
-    serializer_class = LiberalPostsSerializer
+class LibertarianPostsViewSet(RedditPostViewSet):
+    serializer_class = LibertarianPostsSerializer
     init_model = serializer_class.Meta.model
     queryset = init_model.objects.all().order_by("created_on")
 

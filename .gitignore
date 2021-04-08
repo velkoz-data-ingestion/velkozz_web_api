@@ -7,7 +7,8 @@ __pycache__/
 *.so
 
 # Docker Config Stuff:
-/api_psql 
+/api_psql
+/timescale_db
 
 # Distribution / packaging
 .Python

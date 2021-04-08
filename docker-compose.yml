@@ -1,5 +1,5 @@
 services:
-  api:
+  web-api:
     build: .
     depends_on:
       - psql_db
@@ -29,7 +29,21 @@ services:
        
        # SQL Script that creates the databases necessary for the velkoz_api:
        #- ./scripts/create_db.sql:/docker-entrypoint-initdb.d/create_db.sql
-
+  
+  timescale_db:
+    image: timescale/timescaledb:latest-pg12
+    container_name: velkozz_timescale_db
+    restart: always
+    networks:
+      - velkozz-api-network
+    env_file: 
+      - timescale_db.env
+    ports:      
+      - "5431:5431"
+    volumes: 
+      # Persist the data between container invocations
+      - ./timescale_db:/var/lib/postgresql/data
+       
 # Network configuration for API service: 
 networks:
   velkozz-api-network: 
