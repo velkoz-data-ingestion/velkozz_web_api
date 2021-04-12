@@ -1,0 +1,27 @@
+{% extends "core_layout.html" %}
+{% load static %}
+
+{% block head %}
+<link rel="stylesheet" type="text/css" href="{% static 'accounts/css/staff_dashboard_styling.css' %}">
+<script src="https://cdn.plot.ly/plotly-1.2.0.min.js"></script>
+{% endblock head %}
+
+{% block title %}Staff Dashboard{% endblock title %}
+
+{% block body %}
+<div class=dash_grid>
+    <div class="chart" id="summary_request_timeseries"></div>
+</div>
+{% endblock body %}
+
+{% block javascript %}
+
+{{get_datetime|json_script:'get_datetime'}}
+
+{{get_requests_count|json_script:'get_requests_count'}}
+{{post_requests_count|json_script:'post_requests_count'}}
+
+
+
+<script src="{% static 'accounts/js/staff_dashboard.js' %}"></script>
+{% endblock javascript %}

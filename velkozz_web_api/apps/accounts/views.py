@@ -19,7 +19,11 @@ from utils.app_management import get_user_api_app_permissions
 from accounts.models import APIApplication
 from social_media_api.apps import SocialMediaAPIConfig
 from finance_api.apps import FinanceApiConfig
+from request.models import Request
 
+# Importing 3rd party packages:
+import pandas as pd
+from datetime import date, timedelta
 
 class AbstractModelViewSet(viewsets.ModelViewSet):
     """A ModelViewSet object that serves as an abstract
@@ -115,4 +119,40 @@ def account_auth(request):
     else:
         return redirect("login_page")
 
+def staff_dash(request):
+    """Route for displaying the staff dashboard of the site.
+    """
+    # Empty context to populate:
+    context = {}
 
+    # Ensuring that the user is a staff member if not redirect home:
+    if request.user.is_staff is False:
+        return redirect("user_account_dashboard")
+    
+    else:
+
+        # Determining a one month window for queying request data:
+        prev_month = date.today() - timedelta(days=30)
+
+        # Querying all of the requests made to the database in the last month:
+        max_queryset = Request.objects.filter(time__gt=prev_month)
+
+        # QuerySet to Dataframe Conversions:
+        requests_timeseries = max_queryset.values_list("time", "response", "method", "path", "user")
+        timeframe_df = pd.DataFrame.from_records(requests_timeseries, columns=["time", "response", "method", "path", "user"])
+        timeframe_df["_count"] = 1
+        timeframe_df.set_index(timeframe_df['time'], inplace=True)
+
+        # Resampling/Transforming data:
+        daily_resample_get = timeframe_df.loc[timeframe_df['method'] == 'GET', "_count"].squeeze().resample('H').sum()
+        daily_resample_posts = timeframe_df.loc[timeframe_df['method'] != 'GET', "_count"].squeeze().resample('H').sum()
+
+        # Seralzing dataframe columns to pass to template:
+        context['get_datetime'] = daily_resample_get.index.tolist()
+        #context['post_datetime'] = daily_resample_posts.index.tolist()
+        
+        # Popularing Context:
+        context['get_requests_count'] = daily_resample_get.values.tolist()
+        context['post_requests_count'] = daily_resample_posts.values.tolist()
+
+        return render(request, "accounts/staff_dashboard.html", context)

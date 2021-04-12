@@ -4,7 +4,7 @@ from rest_framework import routers
 from rest_framework.authtoken import views
 
 # Importing Account Views:
-from .views import site_main_index, account_index, account_login, account_auth, api_docs, account_dashboard, account_create
+from .views import site_main_index, account_index, account_login, account_auth, api_docs, account_dashboard, account_create, staff_dash
 
 # Importing App Configuration:
 from social_media_api.apps import SocialMediaAPIConfig
@@ -27,6 +27,7 @@ urlpatterns = [
     path("accounts/auth/", account_auth, name="accountlogin"),
     path("api-token-auth/", views.obtain_auth_token),
 
+    path("staff-dash/", staff_dash, name="staff_dashboard"),
 
     # Adding Routes for API Documentation:
     path("docs/<str:api_name>/", api_docs, name="api_docs")

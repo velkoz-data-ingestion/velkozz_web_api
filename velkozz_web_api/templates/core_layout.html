@@ -29,12 +29,19 @@
                 <a href="{% url 'create_account_page' %}" id="">Create Account</a>
             {% endif %}
 
+            {# Conditional Displaying a Debug Dashboard link if the user is a staff member #}
+            {% if request.user.is_staff == True %}
+                <a href="{% url 'staff_dashboard' %}">Staff Dashboard</a>
+            {% endif %}
+
             {# Conditional Displaying A Login or Logout promt based on if a user is logged in: #}
             {% if request.user.is_authenticated == True %}
                 <a href="{% url 'logout' %}?next={% url 'main_index' %}" id="header-login">Logout</a>
             {% else %}
                 <a href="{% url 'login_page' %}" id="header-login">Login</a>
-            {% endif %}            
+            {% endif %}
+            
+
     </div> 
     {% endblock navbar %}
         
