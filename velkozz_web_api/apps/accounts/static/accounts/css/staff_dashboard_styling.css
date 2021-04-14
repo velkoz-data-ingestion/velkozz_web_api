@@ -1,11 +1,18 @@
 /* Configuring the dashboard grid */
 .dash_grid {
     display: grid;
-    grid-template-columns: repeat(1, 1fr);
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(1, 1fr);
+
 }
 
 /* Ensuring the styling for dashboard graphs: */
 #summary_request_timeseries {
     padding: 10px;
-    grid-column: auto;
+    grid-column: auto /span 2;
+}
+    
+#response_methods {
+    padding: 10px;
+    grid-column: auto /span 2;
 }
