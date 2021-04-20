@@ -8,15 +8,14 @@ from django.conf import settings
 from django.apps import apps
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import resolve 
-
 # DRF Packages:
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.authtoken.models import Token
 from .permissions import HasAPIAccess
 from .throttles import APIBurstUserPermissionGroupsThrottle, APISustainedUserPermissionGroupsThrottle  
 
 # Importing app specific utility:
 from utils.app_management import get_user_api_app_permissions
-
 
 # Importing Database Model:
 from accounts.models import APIApplication
@@ -27,6 +26,8 @@ from request.models import Request
 # Importing 3rd party packages:
 import pandas as pd
 from datetime import date, timedelta
+from operator import and_, or_
+from functools import reduce
 
 class AbstractModelViewSet(viewsets.ModelViewSet):
     """A ModelViewSet object that serves as an abstract
@@ -67,7 +68,54 @@ def account_dashboard(request):
     """
     # Creating an empty context to be populated:
     context = {}
+
+    # Querying the user permission groups:
+    for group in request.user.groups.all():
+        # Isolating the user tier groups:
+        if "tier" in group.name:
+            context["api_group"] = group
+
+    # Querying the API key for the given user:
+    try:
+        context["user_api_token"] = Token.objects.get(user=request.user)
+    except Exception:
+        context["user_api_token"] = None 
+
+    # Get a list of View Permissions for specific user:
+    context["model_permissions"] = request.user.get_all_permissions()
+
+    # Determining a one month window for queying request data:
+    prev_week = date.today() - timedelta(days=7)
+
+    # Querying all of the requests made to the database in the last week:
+    request_queryset = Request.objects.filter(time__gt=prev_week).filter(user=request.user)
     
+    # Filtering QuerySet to only contain requests to the API:
+    request_queryset = request_queryset.filter(reduce(or_, [
+        models.Q(path__icontains=app.module_name) for app in APIApplication.objects.all()]))
+
+    # Converting the request queryset to a dataframe for formatting:
+    user_request_values = request_queryset.values_list("time", "path")
+    user_req_df = pd.DataFrame.from_records(user_request_values, index="time", columns=["time","path"])
+    # Adding counter variable for resampling:
+    user_req_df["_counter"] = 1
+
+    #TODO: Fix this Resampling. Producing List of lists instead of just list.
+    
+    hour_resample = user_req_df["_counter"].squeeze().resample("H").sum()
+    daily_resample = user_req_df["_counter"].squeeze().resample("D").sum()
+
+    # Populating context for the user requests:
+    context["user_req_hourly"] = {
+        "Data" : hour_resample.values.tolist(),
+        "Index" : hour_resample.index.tolist()
+    }
+
+    context["user_req_daily"] = {
+        "Data" : daily_resample.values.tolist(),
+        "Index" : daily_resample.index.tolist()
+    }
+
     return render(request, 'accounts/user_account_dashboard.html', context=context)
 
 # API Documentation views:
@@ -193,20 +241,29 @@ def staff_dash(request):
             # Populating application dict w/ GET and POST request timeseries:
             try:
                 app_timeseries_get = timeframe_df.loc[
-                    (timeframe_df["app"] == app) & (timeframe_df["method"] == "GET"), "_count"]
-                application_dict["GET"] = app_timeseries_get.squeeze().resample("H").sum().values.tolist()
+                    (timeframe_df["app"] == app) & (timeframe_df["method"] == "GET"), "_count"].resample("H").sum()
+                application_dict["GET"] = {
+                    "Data" : app_timeseries_get.values.tolist(),
+                    "Index": app_timeseries_get.index.tolist()
+                    }
+                
             except:
                 application_dict["GET"] = [0] * len(daily_resample_get.index)
             
-            try:
+            try:    
                 app_timeseries_post = timeframe_df.loc[
-                    (timeframe_df["app"] == app) & (timeframe_df["method"] == "POST"), "_count"]
-                application_dict["POST"] = app_timeseries_post.squeeze().resample("H").sum().values.tolist()
+                    (timeframe_df["app"] == app) & (timeframe_df["method"] == "POST"), "_count"].resample("H").sum()
+                application_dict["POST"] = {
+                    "Data": app_timeseries_post.values.tolist(),
+                    "Index": app_timeseries_post.index.tolist()
+                    }
             except:
                 application_dict["POST"] = [0] * len(daily_resample_get.index)
 
             # Fully Building nested dict:
             app_timeseries_dict[app] = application_dict
+            print(len(application_dict["GET"]["Data"]), len(application_dict["GET"]['Index']))
+
 
         # Seralzing dataframe columns to pass to template:
         context['get_datetime'] = daily_resample_get.index.tolist()

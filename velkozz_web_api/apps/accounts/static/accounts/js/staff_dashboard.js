@@ -89,8 +89,8 @@ const account_requests = [{
     marker: {
         color: '#32CD32'
       },    
-    x: main_date,
-    y: app_data['accounts']['GET']
+    x: app_data['accounts']['GET']["Index"].map(date => Date.parse(date)),
+    y: app_data['accounts']['GET']["Data"]
 }, 
 {
     type: "scatter",
@@ -100,8 +100,8 @@ const account_requests = [{
       },    
     fill: 'tozeroy',    
     stackgroup: 'one',
-    x: main_date,
-    y: app_data['accounts']['POST']
+    x: app_data['accounts']['POST']["Index"].map(date => Date.parse(date)),
+    y: app_data['accounts']['POST']["Data"]
 }];
 
 Plotly.newPlot("account_request", account_requests, {    
@@ -145,16 +145,22 @@ const social_media_requests = [{
     name: "GET",
     fill: 'tozeroy', 
     stackgroup: 'one',
-    x: main_date,
-    y: app_data['social_media_api']['GET']
+    marker: {
+        color: '#32CD32'
+    },    
+    x: app_data['social_media_api']['GET']["Index"].map(date => Date.parse(date)),
+    y: app_data['social_media_api']['GET']["Data"]
 }, 
 {
     type: "scatter",
     name: "POST",
     fill: 'tozeroy', 
     stackgroup: 'one',
-    x: main_date,
-    y: app_data['social_media_api']['POST']
+    marker: {
+        color: '#ff2a26'
+      },    
+    x: app_data['social_media_api']['POST']["Index"].map(date => Date.parse(date)),
+    y: app_data['social_media_api']['POST']["Data"]
 }];
 
 Plotly.newPlot("social_media_api_request", social_media_requests, {    
@@ -199,16 +205,16 @@ const finance_requests = [{
     name: "GET",
     fill: 'tozeroy', 
     stackgroup: 'one',
-    x: main_date,
-    y: app_data['finance_api']['GET']
+    x: app_data['finance_api']['GET']["Index"].map(date => Date.parse(date)),
+    y: app_data['finance_api']['GET']["Data"]
 }, 
 {
     type: "scatter",
     name: "POST",
     fill: 'tozeroy', 
     stackgroup: 'one',
-    x: main_date,
-    y: app_data['finance_api']['POST']
+    x: app_data['finance_api']['POST']["Index"].map(date => Date.parse(date)),
+    y: app_data['finance_api']['POST']["Data"]
 }];
 
 Plotly.newPlot("finance_api_request", finance_requests, {    

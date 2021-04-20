@@ -1,0 +1,33 @@
+/* Configuring Grid Layout */ 
+.dash_grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+
+}
+
+/* Styling User Info Table */
+.user_info_display {
+    padding: 10px;
+}
+
+table {
+    border-spacing: 0 1em;
+}
+
+td {
+    padding:0 15px;
+}
+
+/* Styling for User API Permissions Div */
+.user_api_permissions {
+    padding: 10px;
+}
+ul {
+    line-height: 45px;
+  }
+
+/* Styling the graph div tags */ 
+.graph_div {
+    padding: 10px;  
+}
+

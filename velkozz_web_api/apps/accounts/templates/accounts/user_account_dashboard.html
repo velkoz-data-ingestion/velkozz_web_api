@@ -3,8 +3,62 @@
 
 {% block title %} User Account Dash {% endblock title %}
 
+{% block head %}
+<link rel="stylesheet" type="text/css" href="{% static 'accounts/css/user_account_dashboard_styling.css' %}">
+<script src="https://cdn.plot.ly/plotly-1.2.0.min.js"></script>
+{% endblock head %}
+
 {% block body %}
 
-<h1>USER DASHBOARD for {{request.user}}</h1>
+<div class="dash_grid">
 
+    <div class="user_info_display">
+        <h1><u>{{request.user}}</u></h1>
+        
+        <table>
+            <tr>
+                <td>Account Type: </td>
+                {% if request.user.is_staff == True %}
+                    <td>Staff Account</td>
+                    {% else %}
+                    <td>Standard Account</td>
+                {% endif %}
+            </tr>
+
+            <tr>
+                <td>Created On:</td>
+                <td>{{request.user.date_joined}}</td>
+            </tr>
+
+            <tr>
+                <td>API Account Type: </td>
+                <td>{{api_group}}</td>
+            </tr>
+
+            <tr>
+                <td>API Key:</td>
+                <td>{{user_api_token}}</td>
+            </tr>
+
+        </table>
+    </div>
+
+    <div class="user_api_permissions">
+        <u><h2>Account Permissions</h2></u>
+            <h3>Front-End In Progress</h3>
+    </div>
+
+    <div class="graph_div" id="hourly_requests_graph"></div>
+
+    <div class="graph_div" id="daily_requests_graph"></div>
+
+</div>
+
+{% block javascript %}
+
+{{user_req_hourly|json_script:'user_req_hourly'}}
+{{user_req_daily|json_script:'user_req_daily'}}
+
+{% endblock javascript %}
+<script src="{% static 'accounts/js/user_account_dashboard.js' %}"></script>
 {% endblock body %}
