@@ -38,3 +38,11 @@ class SMISerializer(MarketIndexSerializers):
 class SPISerializer(MarketIndexSerializers):
     class Meta(MarketIndexSerializers.Meta):
         model = SPIComposition
+
+class NYSESerializer(MarketIndexSerializers):
+    class Meta(MarketIndexSerializers.Meta):
+        model = NYSEComposition
+
+class NASDAQSerializer(MarketIndexSerializers):
+    class Meta(MarketIndexSerializers.Meta):
+        model = NASDAQComposition

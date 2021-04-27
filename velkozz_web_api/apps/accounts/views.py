@@ -69,6 +69,11 @@ def account_dashboard(request):
     # Creating an empty context to be populated:
     context = {}
 
+    # Ensuring that the user is a staff member if not redirect home:
+    if request.user.is_authenticated is False:
+        return redirect("main_index")
+    
+
     # Querying the user permission groups:
     for group in request.user.groups.all():
         # Isolating the user tier groups:

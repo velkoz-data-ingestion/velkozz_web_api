@@ -337,3 +337,115 @@ class SPICompositionViewSet(AbstractModelViewSet):
                     ) for json in body_content]            
                 
         return Response(serializer.data)
+
+class NASDAQCompositionViewSet(AbstractModelViewSet):
+    """
+    The ViewSets providing the REST API routes for the NASDAQ
+    database table.
+    """
+    queryset = NASDAQComposition.objects.all()
+    serializer_class = NASDAQSerializer
+
+    def list(self, request):
+        """The ViewSet method for processing GET requests to the NASDAQ
+        Index Database table.
+        """
+        # Creating a context dict to be populated:
+        context = {}
+        context["request"] = request
+
+        queryset = NASDAQComposition.objects.all()
+        serializer = NASDAQSerializer(queryset, many=True, context=context) 
+
+        return Response(serializer.data)
+
+    def create(self, request):
+        """The ViewSet method that contains logic for processing POST requests
+        to the NASDAQ Index database table.
+        """
+        # Creating a context dict to be populated:
+        context = {}
+        context['request'] = request
+        
+        queryset = NASDAQComposition.objects.all()
+        serializer = NASDAQSerializer(queryset, many=True, context=context)
+
+        # Extracting the json content from the request body:
+        if request.body:
+            
+            # Loading all data from the request body:
+            body_content = json.loads(request.body)
+
+            # Creating or Updating existing model instance via list comprehension:
+            django_objs_lst = [
+                NASDAQComposition.objects.update_or_create(
+                    symbol = json["Symbol"],
+
+                    defaults = {
+                        'company' : json["Company"],
+                        'market_cap': json["Market Cap"],
+                        'country' : json["Country"],
+                        'ipo_year' : json["IPO Year"],
+                        'sector' : json["Sector"],
+                        'industry' : json["Industry"]
+                    }
+                    
+                    ) for json in body_content]            
+                
+        return Response(serializer.data)
+
+class NYSECompositionViewSet(AbstractModelViewSet):
+    """
+    The ViewSets providing the REST API routes for the NYSE
+    database table.
+    """
+    queryset = NYSEComposition.objects.all()
+    serializer_class = NYSESerializer
+
+    def list(self, request):
+        """The ViewSet method for processing GET requests to the NYSE
+        Index Database table.
+        """
+        # Creating a context dict to be populated:
+        context = {}
+        context["request"] = request
+
+        queryset = NYSEComposition.objects.all()
+        serializer = NYSESerializer(queryset, many=True, context=context) 
+
+        return Response(serializer.data)
+
+    def create(self, request):
+        """The ViewSet method that contains logic for processing POST requests
+        to the NYSE Index database table.
+        """
+        # Creating a context dict to be populated:
+        context = {}
+        context['request'] = request
+        
+        queryset = NYSEComposition.objects.all()
+        serializer = NYSESerializer(queryset, many=True, context=context)
+
+        # Extracting the json content from the request body:
+        if request.body:
+            
+            # Loading all data from the request body:
+            body_content = json.loads(request.body)
+
+            # Creating or Updating existing model instance via list comprehension:
+            django_objs_lst = [
+                NYSEComposition.objects.update_or_create(
+                    symbol = json["Symbol"],
+
+                    defaults = {
+                        'company' : json["Company"],
+                        'market_cap': json["Market Cap"],
+                        'country' : json["Country"],
+                        'ipo_year' : json["IPO Year"],
+                        'sector' : json["Sector"],
+                        'industry' : json["Industry"]
+                    }
+                    
+                    ) for json in body_content]            
+                
+        return Response(serializer.data)

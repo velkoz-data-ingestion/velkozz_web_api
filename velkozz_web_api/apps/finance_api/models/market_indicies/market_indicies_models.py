@@ -218,3 +218,87 @@ class SPIComposition(models.Model):
 
     class Meta:
         verbose_name_plural = "Swiss Performance Index Composition"
+
+# The NYSE Market Index Composition:
+class NYSEComposition(models.Model):
+    """A data model representing a database table containing information
+    on the New-York Stock Exchange. 
+
+    It is built for the velkozz API with the ETL pipeline API in mind for POST
+    requsts. There is no primary key declared, the model makes use of django's 
+    automatic primary key pk. The model contains all the fields to directly
+    interact with the data provided from the nyse index composition csv.
+
+    Attributes:
+
+        symbol (models.CharField): The ticker symbol of the company. 
+        
+        company (models.CharField): The company name.
+
+        market_cap (models.IntegerField): The total market cap of the company.
+
+        country (models.CharField): The country in which the company is headquarterd.
+
+        ipo_year (models.PositiveSmallIntegerField): The year when the company went public
+
+        sector (models.CharField): The broad sector of the industry
+
+        industry (models.CharField): The more specific industry that the company is appart
+            of.
+
+    """
+    symbol = models.CharField(max_length=10, unique=True)
+    company = models.CharField(max_length=300)
+    market_cap = models.FloatField(null=True)
+    country = models.CharField(max_length=150, null=True)
+    ipo_year = models.PositiveSmallIntegerField(null=True)
+    sector = models.CharField(max_length=150, null=True)
+    industry = models.CharField(max_length=150, null=True)
+
+    def __str__(self):
+        return self.company
+
+    class Meta:
+        verbose_name_plural = "NYSE Index Composition"
+
+# NASDAQ Market Index composition:
+class NASDAQComposition(models.Model):
+    """A data model representing a database table containing information
+    on the NASDAQ. 
+
+    It is built for the velkozz API with the ETL pipeline API in mind for POST
+    requsts. There is no primary key declared, the model makes use of django's 
+    automatic primary key pk. The model contains all the fields to directly
+    interact with the data provided from the nasdaq index composition csv.
+
+    Attributes:
+
+        symbol (models.CharField): The ticker symbol of the company. 
+        
+        company (models.CharField): The company name.
+
+        market_cap (models.IntegerField): The total market cap of the company.
+
+        country (models.CharField): The country in which the company is headquarterd.
+
+        ipo_year (models.PositiveSmallIntegerField): The year when the company went public
+
+        sector (models.CharField): The broad sector of the industry
+
+        industry (models.CharField): The more specific industry that the company is appart
+            of.
+
+    """
+    symbol = models.CharField(max_length=10, unique=True)
+    company = models.CharField(max_length=300)
+    market_cap = models.FloatField(null=True)
+    country = models.CharField(max_length=150, null=True)
+    ipo_year = models.PositiveSmallIntegerField(null=True)
+    sector = models.CharField(max_length=150, null=True)
+    industry = models.CharField(max_length=150, null=True)
+
+    def __str__(self):
+        return self.company
+
+    class Meta:
+        verbose_name_plural = "NASDAQ Index Composition"
