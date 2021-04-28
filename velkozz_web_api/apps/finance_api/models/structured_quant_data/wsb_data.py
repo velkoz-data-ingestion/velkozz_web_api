@@ -26,6 +26,9 @@ class WallStreetBetsTickerMentions(models.Model):
     day = models.DateField(primary_key=True, unique=True)
     ticker_count = models.TextField()
 
+    def __str__(self):
+        return f"Frequency Counts for {self.day}"
+
     class Meta:
         ordering = ['day']
         verbose_name_plural = "Wallstreetbets Ticker Mentions"

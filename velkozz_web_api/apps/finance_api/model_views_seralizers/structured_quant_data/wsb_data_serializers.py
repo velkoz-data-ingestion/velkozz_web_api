@@ -5,6 +5,8 @@ from rest_framework import serializers
 from finance_api.models.structured_quant_data.wsb_data import WallStreetBetsTickerMentions
 
 class WallStreetBetsTickerMentionsSerializer(serializers.HyperlinkedModelSerializer):
+    day = serializers.DateField()
+
     class Meta:
         model = WallStreetBetsTickerMentions
         fields = "__all__"
