@@ -4,6 +4,7 @@ from rest_framework import routers
 
 # Importing the Reddit Views from the Reddit MVC:
 from .model_views_seralizers.reddit_api import reddit_views
+from .model_views_seralizers.indeed_api import indeed_views
 
 # Creating Url Router:
 router = routers.DefaultRouter()
@@ -14,6 +15,9 @@ subreddit_viewsets = reddit_views.RedditPostViewSet.__subclasses__()
 # Iterating over each ModelViewSet dynamically registering routes to the router:
 for viewset in subreddit_viewsets:
     router.register(fr"reddit/r{viewset.init_model.subreddit_name}", viewset)
+
+# Adding endpoints for Indeed Job Listings:
+router.register(r"jobs/indeed/listings", indeed_views.IndeedJobPostsViewSets)
 
 # Creating Automatic URL Routing:
 urlpatterns = router.urls
