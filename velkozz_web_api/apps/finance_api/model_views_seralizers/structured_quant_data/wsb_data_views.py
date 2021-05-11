@@ -28,8 +28,29 @@ class WallStreetBetsTickerMentionsViewSet(AbstractModelViewSet):
         context = {}
         context["request"] = request
 
-        # Querying the database ticker mentions:
+        # Extracting query params from url:
+        start_date = request.GET.get("Start-Date", None)
+        end_date = request.GET.get("End-Date", None)
+
+        # Querying and seralizing the database for Indeed Posts:
         ticker_mentions = WallStreetBetsTickerMentions.objects.all()
+
+        # Conditionals applying logic to queryset based on url params: 
+        # Date Time Filtering:
+        if start_date is None and end_date is None:
+            pass
+        else:
+            if end_date is None:
+                ticker_mentions = ticker_mentions.filter(day__gt=start_date)
+
+            if start_date is None:
+                ticker_mentions = ticker_mentions.filter(day__lt=end_date)         
+
+            if start_date and end_date is not None:
+                ticker_mentions = ticker_mentions.filter(day__range=(start_date,end_date))
+
+
+        # Seralizing wsb ticker mentions:
         seralized_data = WallStreetBetsTickerMentionsSerializer(ticker_mentions, many=True, context=context)
 
         return Response(seralized_data.data)
