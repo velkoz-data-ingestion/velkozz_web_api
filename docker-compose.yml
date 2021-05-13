@@ -1,4 +1,4 @@
-version: "3.0"
+version: "3.9"
 services:
   web-api:
     build: .
@@ -6,7 +6,7 @@ services:
       - psql_db
     container_name: velkozz_api
     networks:
-      - velkozz-api-network      
+      - velkozz_web_api_velkozz-api-network      
     env_file: 
       - local_prod.env
       - prod_db.env
@@ -18,7 +18,7 @@ services:
     container_name: velkoz_psql_backend
     restart: always
     networks:
-      - velkozz-api-network
+      - velkozz_web_api_velkozz-api-network
     env_file:
       - prod_db.env
       - local_prod.env
@@ -36,7 +36,7 @@ services:
     container_name: velkozz_timescale_db
     restart: always
     networks:
-      - velkozz-api-network
+      - velkozz_web_api_velkozz-api-network
     env_file: 
       - timescale_db.env
     ports:      
@@ -47,4 +47,4 @@ services:
        
 # Network configuration for API service: 
 networks:
-  velkozz-api-network: 
+  velkozz_web_api_velkozz-api-network: 
