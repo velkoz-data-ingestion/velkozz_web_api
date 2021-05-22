@@ -34,10 +34,12 @@ class IndeedJobPostsViewSets(AbstractModelViewSet):
         context['request'] = request
 
         # Extracting query params from url:
+        job_listing_query = request.GET.get("job", None)
         start_date = request.GET.get("Start-Date", None)
         end_date = request.GET.get("End-Date", None)
         location_query = request.GET.get("location", None)
-        
+        company_query = request.GET.get("company", None)
+
         # Querying and seralizing the database for Indeed Posts:
         queryset = indeed_models.IndeedJobPosts.objects.all()
 
@@ -53,12 +55,20 @@ class IndeedJobPostsViewSets(AbstractModelViewSet):
                 queryset = queryset.filter(date_posted__lt=end_date)         
 
             if start_date and end_date is not None:
-                queryset = queryset.filter(date_posted__range=(start_date,end_date))
+                queryset = queryset.filter(date_posted__range=(start_date, end_date))
 
         # Location Filtering:
         if location_query is not None:
             queryset= queryset.filter(location__contains=location_query)
         
+        # Type of Job Filtering:
+        if job_listing_query is not None:
+            queryset=queryset.filter(title__contains=job_listing_query)
+
+        # Company Name Filtering:
+        if company_query is not None:
+            queryset=queryset.filter(company__contains=company_query)
+
         serializer = IndeedJobsPostsSerializer(queryset, many=True, context=context)
         
         return Response(serializer.data)
@@ -77,14 +87,13 @@ class IndeedJobPostsViewSets(AbstractModelViewSet):
 
             # Creating or updating the indeed job model based on primary key:
             job_listings = [
-                indeed_models.IndeedJobPosts.objects.update_or_create(
+                indeed_models.IndeedJobPosts.objects.get_or_create(
                     id=listing["id"], 
-
+                    title =listing["title"],    
+                    company =listing["company"],
+                    location=listing["location"],
+                    summary=listing["summary"],
                     defaults = {
-                        "title":listing["title"],    
-                        "company":listing["company"],
-                        "location":listing["location"],
-                        "summary":listing["summary"],
                         "date_posted":listing['date_posted']
                     }
                     

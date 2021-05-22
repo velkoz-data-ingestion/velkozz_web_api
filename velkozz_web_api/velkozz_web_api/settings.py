@@ -44,6 +44,10 @@ INSTALLED_APPS = [
 
     # The Finance API Application:
     "finance_api.apps.FinanceApiConfig"
+
+    # The Labeled Machine Learning Data Application:
+    #"ml_labeled_data.apps.MlLabeledDataConfig"
+
 ]
 
 MIDDLEWARE = [

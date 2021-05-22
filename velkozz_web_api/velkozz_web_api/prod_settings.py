@@ -14,7 +14,7 @@ SECRET_KEY = os.environ['SECRET_KEY']
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["0.0.0.0", "127.0.0.1", "localhost", "web-api"]
+ALLOWED_HOSTS = ["0.0.0.0", "127.0.0.1", "localhost", "web-api", "192.168.100.208", "192.168.100.220"]
 
 # Url Path for Login Redirect:
 LOGIN_REDIRECT_URL = '/'
@@ -44,6 +44,9 @@ INSTALLED_APPS = [
 
     # The Finance API Application:
     "finance_api.apps.FinanceApiConfig"
+
+    # The Labeled Machine Learning Data Application:
+    #"ml_labeled_data.apps.MlLabeledDataConfig"
 ]
 
 MIDDLEWARE = [
