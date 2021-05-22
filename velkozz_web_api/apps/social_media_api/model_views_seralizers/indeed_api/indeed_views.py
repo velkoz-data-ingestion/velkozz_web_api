@@ -87,14 +87,13 @@ class IndeedJobPostsViewSets(AbstractModelViewSet):
 
             # Creating or updating the indeed job model based on primary key:
             job_listings = [
-                indeed_models.IndeedJobPosts.objects.update_or_create(
+                indeed_models.IndeedJobPosts.objects.get_or_create(
                     id=listing["id"], 
-
+                    title =listing["title"],    
+                    company =listing["company"],
+                    location=listing["location"],
+                    summary=listing["summary"],
                     defaults = {
-                        "title":listing["title"],    
-                        "company":listing["company"],
-                        "location":listing["location"],
-                        "summary":listing["summary"],
                         "date_posted":listing['date_posted']
                     }
                     
