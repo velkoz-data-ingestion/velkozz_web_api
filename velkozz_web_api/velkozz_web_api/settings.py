@@ -43,7 +43,10 @@ INSTALLED_APPS = [
     "social_media_api.apps.SocialMediaAPIConfig",
 
     # The Finance API Application:
-    "finance_api.apps.FinanceApiConfig"
+    "finance_api.apps.FinanceApiConfig",
+
+    # News Data API Application:
+    "news_api.apps.NewsApiConfig"
 
     # The Labeled Machine Learning Data Application:
     #"ml_labeled_data.apps.MlLabeledDataConfig"
@@ -171,3 +174,5 @@ MEDIA_ROOT = "static_files/"
 
 # Pointing to the Custom User Model:
 AUTH_USER_MODEL = "accounts.CustomUser"
+
+DATA_UPLOAD_MAX_MEMORY_SIZE = 5242880

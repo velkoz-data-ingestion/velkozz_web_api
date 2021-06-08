@@ -185,3 +185,6 @@ MEDIA_ROOT = "static_files/"
 
 # Pointing to the Custom User Model:
 AUTH_USER_MODEL = "accounts.CustomUser"
+
+# Increasing the maximum payload size for the application:
+DATA_UPLOAD_MAX_MEMORY_SIZE = 5242880

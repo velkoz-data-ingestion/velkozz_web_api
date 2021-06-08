@@ -15,5 +15,8 @@ urlpatterns = [
     path("social_media_api/", include("apps.social_media_api.urls")),
     
     # Routes for the Finance Data API urls:
-    path("finance_api/", include("apps.finance_api.urls"))
+    path("finance_api/", include("apps.finance_api.urls")),
+
+    # Routes for the News Article Data API urls:
+    path("news_api/", include("apps.news_api.urls"))
 ]

@@ -89,12 +89,13 @@ class IndeedJobPostsViewSets(AbstractModelViewSet):
             job_listings = [
                 indeed_models.IndeedJobPosts.objects.get_or_create(
                     id=listing["id"], 
-                    title =listing["title"],    
-                    company =listing["company"],
-                    location=listing["location"],
-                    summary=listing["summary"],
+                    
                     defaults = {
-                        "date_posted":listing['date_posted']
+                        "date_posted":listing['date_posted'],
+                        "title":listing["title"],
+                        "company":listing["company"],
+                        "location":listing["location"],
+                        "summary":listing["summary"]
                     }
                     
                 ) for listing in body_content
