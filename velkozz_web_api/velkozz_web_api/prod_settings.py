@@ -79,7 +79,7 @@ DATABASES = {
         'NAME': os.environ["POSTGRES_DB"],
         'USER': os.environ["POSTGRES_USER"],
         'PASSWORD': os.environ["POSTGRES_PASSWORD"],
-        'HOST': "psql_db",
+        'HOST': "velkoz_psql_backend",
         'PORT': os.environ["POSTGRES_PORT"]
 
     },
@@ -89,7 +89,7 @@ DATABASES = {
         'NAME':os.environ["TIMESCALE_DB"],
         'USER':os.environ["TIMESCALE_USER"],
         'PASSWORD':os.environ["TIMESCALE_PASSWORD"],
-        'HOST': "timescale_db",
+        'HOST': "velkozz_timescale_db",
         'PORT': os.environ["TIMESCALE_PORT"]
     }
 }
