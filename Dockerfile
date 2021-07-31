@@ -11,5 +11,4 @@ WORKDIR /home/app/velkoz_web_api
 # Running all of the python install components:
 RUN pip install --no-cache-dir -r requirements.txt
 
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]  
 EXPOSE 8000
