@@ -1,18 +1,10 @@
 from pathlib import Path
 import os
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
-
-
 SECRET_KEY = os.environ['SECRET_KEY']
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ["0.0.0.0", "127.0.0.1", "localhost", "web-api", "192.168.100.208", "192.168.100.220"]
 
@@ -20,7 +12,6 @@ ALLOWED_HOSTS = ["0.0.0.0", "127.0.0.1", "localhost", "web-api", "192.168.100.20
 LOGIN_REDIRECT_URL = '/'
 
 # Application definition
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -81,9 +72,7 @@ TEMPLATES = [
 WSGI_APPLICATION = 'velkozz_web_api.wsgi.application'
 
 
-# Database
-# https://docs.djangoproject.com/en/3.1/ref/settings/#databases
-
+# Database:
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -105,9 +94,7 @@ DATABASES = {
     }
 }
 
-# Password validation
-# https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
-
+# Password validation:
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -158,9 +145,7 @@ REST_FRAMEWORK = {
     }
 }
 
-# Internationalization
-# https://docs.djangoproject.com/en/3.1/topics/i18n/
-
+# Internationalization:
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'UTC'

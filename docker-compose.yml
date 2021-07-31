@@ -4,6 +4,7 @@ services:
     build: .
     depends_on:
       - psql_db
+      - timescale_db
     container_name: velkozz_api
     networks:
       - velkozz-api-network      
@@ -26,11 +27,8 @@ services:
       - "5432:5432"
     volumes: 
        # Persist the data between container invocations
-       - ./api_psql:/var/lib/postgresql/data
-       
-       # SQL Script that creates the databases necessary for the velkoz_api:
-       #- ./scripts/create_db.sql:/docker-entrypoint-initdb.d/create_db.sql
-  
+       - ~/velkozz_db/api_psql:/var/lib/postgresql/data
+        
   timescale_db:
     image: timescale/timescaledb:latest-pg12
     container_name: velkozz_timescale_db
@@ -43,7 +41,7 @@ services:
       - "5431:5431"
     volumes: 
       # Persist the data between container invocations
-      - ./timescale_db:/var/lib/postgresql/data
+      - ~/velkozz_db/timescale_db:/var/lib/postgresql/data
        
 # Network configuration for API service: 
 networks:
