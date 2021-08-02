@@ -9,6 +9,7 @@ __pycache__/
 # Docker Config Stuff:
 /api_psql
 /timescale_db
+staticroot
 
 # Distribution / packaging
 .Python

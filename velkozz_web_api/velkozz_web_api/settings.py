@@ -14,7 +14,7 @@ SECRET_KEY = 'k7mll44^7sz(k!ctb5*llxr1uettxe&yv(&fh#dr+(1ua-8%_k'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 # Url Path for Login Redirect:
 LOGIN_REDIRECT_URL = '/'
@@ -165,7 +165,9 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, "staticroot")
+
 # Adding a global static directory to the app: 
 STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
 
