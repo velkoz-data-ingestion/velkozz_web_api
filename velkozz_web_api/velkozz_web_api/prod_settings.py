@@ -163,7 +163,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = 'static/'
-STATIC_ROOT = os.path.join(BASE_DIR, "staticroot")
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
 # Adding a global static directory to the app: 
 STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
