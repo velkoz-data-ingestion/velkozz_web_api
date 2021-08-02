@@ -7,7 +7,7 @@ from django.apps import AppConfig
 class UserAccountConfig(AppConfig):
     name = 'accounts'
     verbose_name = "User Accounts Application"
-    
+
     def ready(self):
         """
         Upon app startup the method creates several groups in the django
@@ -24,11 +24,16 @@ class UserAccountConfig(AppConfig):
         #from accounts.models import CustomUser
     
         # TODO: Determine if this should be done hardcoded or after init in database:
-        # API user permissions:
-        Group.objects.update_or_create(name="api_free_tier")
-        Group.objects.update_or_create(name="api_senior_tier")
-        Group.objects.update_or_create(name="api_professional_tier")
-    
-        # API Developer permission groups:
-        Group.objects.update_or_create(name="api_ingestion")
-        Group.objects.update_or_create(name="api_developer")
+        # Try Catch that does not crash the project before migrations are made to the database:
+        try:
+            # API user permissions:
+            Group.objects.update_or_create(name="api_free_tier")
+            Group.objects.update_or_create(name="api_senior_tier")
+            Group.objects.update_or_create(name="api_professional_tier")
+        
+            # API Developer permission groups:
+            Group.objects.update_or_create(name="api_ingestion")
+            Group.objects.update_or_create(name="api_developer")
+        except:
+            pass
+        

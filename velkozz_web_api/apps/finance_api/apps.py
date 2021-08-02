@@ -13,11 +13,16 @@ class FinanceApiConfig(AppConfig):
         # Importing the API Applications data model:
         from accounts.models import APIApplication
 
-        APIApplication.objects.update_or_create(
-            module_name=self.name,
-            defaults = {
-                'app_name' : self.verbose_name,
-                'app_description' : self.app_description
-            }
-        )
+        # Try Catch to aviod pre-migration crash:
+        try:
+            APIApplication.objects.update_or_create(
+                module_name=self.name,
+                defaults = {
+                    'app_name' : self.verbose_name,
+                    'app_description' : self.app_description
+                }
+            )
+        except:
+            pass
+
         
