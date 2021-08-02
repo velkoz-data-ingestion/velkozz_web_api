@@ -34,7 +34,10 @@ INSTALLED_APPS = [
     "social_media_api.apps.SocialMediaAPIConfig",
 
     # The Finance API Application:
-    "finance_api.apps.FinanceApiConfig"
+    "finance_api.apps.FinanceApiConfig",
+
+    # News Data API Application:
+    "news_api.apps.NewsApiConfig"
 
     # The Labeled Machine Learning Data Application:
     #"ml_labeled_data.apps.MlLabeledDataConfig"
