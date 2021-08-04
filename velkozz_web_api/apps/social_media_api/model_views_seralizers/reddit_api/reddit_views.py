@@ -72,35 +72,33 @@ class RedditPostViewSet(AbstractModelViewSet):
         else:
             posts = {} # Empty Json if no body content.
 
-        # Creating a list of WallStreetBetsPosts object from Json data via list comprehension:
-        posts_objects = [
-            self.init_model(
-                id = post["id"],
-                title = post["title"],
-                content = post["content"],
-                upvote_ratio = post["upvote_ratio"],
-                score = post["score"],
-                num_comments= post["num_comments"],
-                created_on = post["created_on"],
-                stickied= post["stickied"],
-                over_18 = post["over_18"],
-                spoiler = post["spoiler"],
-                author_is_gold = post["author_gold"],
-                author_mod = post["mod_status"],
-                author_has_verified_email = post["verified_email_status"],
-                permalink = post["link"],
-                author = post["author"],
-                author_created = post["acc_created_on"],
-                comment_karma = post["comment_karma"]) 
-
-            for post in posts 
-        ]
-        print(posts_objects)
-        
         # Performing a bulk insert for all posts recieved by the POST request:
-        self.init_model.objects.bulk_create(posts_objects)
+        posts_objects = [
+            self.init_model.objects.update_or_create(
+                id = post["id"],
+                defaults= {
+                "id":post["id"],
+                "title":post["title"],
+                "content":post["content"],
+                "upvote_ratio":post["upvote_ratio"],
+                "score":post["score"],
+                "num_comments":post["num_comments"],
+                "created_on":post["created_on"],
+                "stickied":post["stickied"],
+                "over_18":post["over_18"],
+                "spoiler":post["spoiler"],
+                "author_is_gold":post["author_gold"],
+                "author_mod":post["mod_status"],
+                "author_has_verified_email":post["verified_email_status"],
+                "permalink":post["link"],
+                "author":post["author"],
+                "author_created":post["acc_created_on"],
+                "comment_karma":post["comment_karma"]}                
+            ) for post in posts
+        ]
         
         # Seralizing the objects that had been creatd:
+        posts_objects = [post[0] for post in posts_objects]
         serializer = self.serializer_class(posts_objects, many=True, context=context)
         
         return Response(serializer.data)
