@@ -4,6 +4,7 @@ from django.contrib import admin
 # Importing Database Base Models:
 from .models.reddit.reddit_models import RedditPosts
 from .models.indeed.indeed_models import IndeedJobPosts
+from .models.youtube.youtube_models import DailyYoutubeChannelStats
 
 # All of the Subreddit model posts extended from RedditPosts:
 reddit_db_models = RedditPosts.__subclasses__()
@@ -14,3 +15,6 @@ for reddit_model in reddit_db_models:
 
 # Registering Indeed Models to Admin Dash:
 admin.site.register(IndeedJobPosts)
+
+# Registering Indeed Models to Admin Dash:
+admin.site.register(DailyYoutubeChannelStats)
