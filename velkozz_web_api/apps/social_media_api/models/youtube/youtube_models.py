@@ -41,7 +41,7 @@ class DailyYoutubeChannelStats(models.Model):
 
     """
     channel_id = models.CharField(max_length=120)
-    channel_name = models.CharField(max_length=100)
+    channel_name = models.CharField(max_length=100, null=True)
     total_views = models.IntegerField()
     total_subscribers = models.IntegerField()
     total_videos = models.IntegerField()
