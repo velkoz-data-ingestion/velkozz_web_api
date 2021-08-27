@@ -6,10 +6,13 @@ from django.contrib import auth
 from django.contrib.auth.models import Permission
 from django.conf import settings
 from django.apps import apps
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.urls import resolve 
+
 # DRF Packages:
+from rest_framework.decorators import api_view
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 from .permissions import HasAPIAccess
 from .throttles import APIBurstUserPermissionGroupsThrottle, APISustainedUserPermissionGroupsThrottle  
@@ -23,9 +26,13 @@ from social_media_api.apps import SocialMediaAPIConfig
 from finance_api.apps import FinanceApiConfig
 from request.models import Request
 
+# Importing Seralizers for Request Logs: 
+from accounts.account_serializers import RequestSerializer, SettingsSerializer
+
 # Importing 3rd party packages:
 import pandas as pd
 from datetime import date, timedelta
+import time
 from operator import and_, or_
 from functools import reduce
 
@@ -302,3 +309,95 @@ def staff_dash(request):
         context['response_codes'] = response_code_dict
 
         return render(request, "accounts/staff_dashboard.html", context)
+
+# Request logger view method:
+class RequestLogViewSet(AbstractModelViewSet):
+    """The REST API ViewSet for the 3rd party request logs. This viewset is only designed to return
+    logging data, it does not perform any of the other CRUD functions associated with a REST API.
+    It is designed explicitly for the purpose of being used by the Flask Logging system.
+    """
+    serializer_class = RequestSerializer
+    queryset = Request.objects.all().order_by("time")
+    
+    def list(self, request):
+        """This method reads monthly requesst logs, seralizes them and returns then in JSON
+        format.
+        """
+        # Building the context that the method populateds:
+        context = {}
+        context["request"] = request
+
+        # Extracting Query Params from the url:
+        start_date = request.GET.get("Start-Date", None)
+        end_date = request.GET.get("End-Date", None)
+        user = request.GET.get("User", None)
+        method = request.GET.get("Method", None)
+        ip = request.GET.get("IP", None)
+        
+        # Filtering the query of Requests based on url query param:
+        queryset = Request.objects.all().order_by("-time")
+
+        # Date Time Filtering:
+        if start_date is None and end_date is None:
+            pass
+        else:
+            if end_date is None:
+                queryset = queryset.filter(time__gt=start_date)
+
+            if start_date is None:
+                queryset = queryset.filter(time__lt=end_date)         
+
+            if start_date and end_date is not None:
+                queryset = queryset.filter(time__range=(start_date, end_date))
+        pass
+        
+        # User filtering:
+        if user is not None:
+            queryset = queryset.filter(user=user)
+        
+        # IP address filtering:
+        if ip is not None:
+            queryset = queryset.filter(ip=ip)
+
+        # Response type filtering:
+        if method is not None:
+            queryset = queryset.filter(method=method)
+
+        # Creating the seralizer out of the queryset:
+        seralizer = RequestSerializer(queryset, many=True, context=context)
+        
+        return Response(seralizer.data)
+
+# Django Settings View Method:
+class DjangoSettingsViewSet(AbstractModelViewSet):
+    """This is the method that unpacks the Django settings that are currently
+    being used by the project and displays them as a JSON. 
+
+    The ViewSet only supports the reading section of a REST API, it does not allow
+    the Django settings to be updated. This could be done through a simple view method
+    as opposed to a full MVC ViewSet structure but a ViewSet is used to make use of the 
+    user model permission system and token authentication functions.
+    """
+    queryset = Request.objects.all().order_by("time")
+    serializer_class = SettingsSerializer
+
+    def list(self, request):
+        """Extracting all the relevant settings data and converting it to JSON.
+        """
+        # Extracting all non-critial settings:
+        seralizer = SettingsSerializer(settings)
+
+        # TODO: Manually unpack the settings module so that the seralizer can work with correct field types (DATABASE: DictField)
+
+        return Response(seralizer.data)
+
+# Ping view method:
+def ping(request):
+    """The method recives a request and returns a generic response that proves the server is
+    online. This is a standard 'Ping-Pong' function and is used by loggers and microservices
+    to quickly determine if the server is online.
+    """
+    return JsonResponse({
+        "Response":"pong",
+        "TimeStamp": time.time()
+        })

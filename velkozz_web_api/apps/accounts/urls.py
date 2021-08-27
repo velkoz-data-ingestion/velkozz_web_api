@@ -4,12 +4,20 @@ from rest_framework import routers
 from rest_framework.authtoken import views
 
 # Importing Account Views:
-from .views import site_main_index, account_index, account_login, account_auth, api_docs, account_dashboard, account_create, staff_dash
+from .views import site_main_index, account_index, account_login, account_auth, api_docs, account_dashboard, account_create, staff_dash, RequestLogViewSet, DjangoSettingsViewSet, ping
 
 # Importing App Configuration:
 from social_media_api.apps import SocialMediaAPIConfig
 from finance_api.apps import FinanceApiConfig
 
+# Creating a url router for account APIs:
+router = routers.DefaultRouter()
+
+# Populating Router w/ API ViewSets: 
+router.register(r"requests", RequestLogViewSet)
+router.register(r"settings", DjangoSettingsViewSet)
+
+# Standard URL patterns: 
 urlpatterns = [
     
     # Main Index of the Site:
@@ -30,5 +38,12 @@ urlpatterns = [
     path("staff-dash/", staff_dash, name="staff_dashboard"),
 
     # Adding Routes for API Documentation:
-    path("docs/<str:api_name>/", api_docs, name="api_docs")
+    path("docs/<str:api_name>/", api_docs, name="api_docs"),
+
+    # Adding Router url routes to the application 
+    path("account_api/", include(router.urls)), 
+
+    # Adding the ping method route:
+    path("ping/", ping, name="ping_response")
+
 ]
