@@ -19,26 +19,26 @@
 
     {% block navbar %}
     <div class="header-card">
-            <a href="{% url 'main_index' %}">Velkozz REST APIs</a>
-            <a href="{% url 'user_dashboard' %}">API Dashboard</a>
+            <a href="{% url 'main_index' %}"><img src="https://img.icons8.com/material-sharp/48/ffffff/home.png"/></a>
+            <a href="{% url 'user_dashboard' %}"><img src="https://img.icons8.com/ios-filled/50/ffffff/api-settings.png"/></a>
             
             {# Conditional Displaying a User Dashboard or Create User Dashboard if a user is logged in #}
             {% if request.user.is_authenticated == True %}
-                <a href="{% url 'user_account_dashboard' %}" id="">Account API Dashboard</a>
+                <a href="{% url 'user_account_dashboard' %}" id=""><img src="https://img.icons8.com/external-vitaliy-gorbachev-fill-vitaly-gorbachev/60/ffffff/external-dashboard-blogger-vitaliy-gorbachev-fill-vitaly-gorbachev.png"/></a>
             {% else %}
-                <a href="{% url 'create_account_page' %}" id="">Create Account</a>
+                <a href="{% url 'create_account_page' %}" id=""><img src="https://img.icons8.com/ios-filled/50/ffffff/create.png"/></a>
             {% endif %}
 
             {# Conditional Displaying a Debug Dashboard link if the user is a staff member #}
             {% if request.user.is_staff == True %}
-                <a href="{% url 'staff_dashboard' %}">Staff Dashboard</a>
+                <a href="{% url 'staff_dashboard' %}"><img src="https://img.icons8.com/external-itim2101-lineal-itim2101/64/ffffff/external-admin-computer-and-laptop-itim2101-lineal-itim2101-1.png"/></a>
             {% endif %}
 
             {# Conditional Displaying A Login or Logout promt based on if a user is logged in: #}
             {% if request.user.is_authenticated == True %}
-                <a href="{% url 'logout' %}?next={% url 'main_index' %}" id="header-login">Logout</a>
+                <a href="{% url 'logout' %}?next={% url 'main_index' %}" id="header-login"><img src="https://img.icons8.com/ios-filled/50/ffffff/logout-rounded-left.png"/></a>
             {% else %}
-                <a href="{% url 'login_page' %}" id="header-login">Login</a>
+                <a href="{% url 'login_page' %}" id="header-login"><img src="https://img.icons8.com/ios-filled/50/ffffff/login-rounded-right.png"/></a>
             {% endif %}
             
 

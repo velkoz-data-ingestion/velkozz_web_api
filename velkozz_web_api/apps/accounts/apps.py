@@ -34,6 +34,7 @@ class UserAccountConfig(AppConfig):
             # API Developer permission groups:
             Group.objects.update_or_create(name="api_ingestion")
             Group.objects.update_or_create(name="api_developer")
+        
         except:
             pass
         

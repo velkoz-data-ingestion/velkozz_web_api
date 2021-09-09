@@ -24,6 +24,7 @@ from utils.app_management import get_user_api_app_permissions
 from accounts.models import APIApplication
 from social_media_api.apps import SocialMediaAPIConfig
 from finance_api.apps import FinanceApiConfig
+from news_api.apps import NewsApiConfig
 from request.models import Request
 
 # Importing Seralizers for Request Logs: 
@@ -113,22 +114,27 @@ def account_dashboard(request):
     user_req_df["_counter"] = 1
 
     #TODO: Fix this Resampling. Producing List of lists instead of just list.
+
+    # logic to not resample if index is broken (eg: There is no data so index is an empty list):
+    if len(user_req_df) == 0:
+           return render(request, 'accounts/user_account_dashboard.html', context=context)
     
-    hour_resample = user_req_df["_counter"].squeeze().resample("H").sum()
-    daily_resample = user_req_df["_counter"].squeeze().resample("D").sum()
+    else:
+        hour_resample = user_req_df["_counter"].squeeze().resample("H").sum()
+        daily_resample = user_req_df["_counter"].squeeze().resample("D").sum()
 
-    # Populating context for the user requests:
-    context["user_req_hourly"] = {
-        "Data" : hour_resample.values.tolist(),
-        "Index" : hour_resample.index.tolist()
-    }
+        # Populating context for the user requests:
+        context["user_req_hourly"] = {
+            "Data" : hour_resample.values.tolist(),
+            "Index" : hour_resample.index.tolist()
+        }
 
-    context["user_req_daily"] = {
-        "Data" : daily_resample.values.tolist(),
-        "Index" : daily_resample.index.tolist()
-    }
+        context["user_req_daily"] = {
+            "Data" : daily_resample.values.tolist(),
+            "Index" : daily_resample.index.tolist()
+        }
 
-    return render(request, 'accounts/user_account_dashboard.html', context=context)
+        return render(request, 'accounts/user_account_dashboard.html', context=context)
 
 # API Documentation views:
 def api_docs(request, api_name):
@@ -146,7 +152,8 @@ def api_docs(request, api_name):
     # Declaring main dict of all api app names: api doc template path:
     api_doc_dict = {
         SocialMediaAPIConfig.name : "accounts/docs/social_media_api_docs.html",
-        FinanceApiConfig.name : "accounts/docs/finance_data_api_docs.html"
+        FinanceApiConfig.name : "accounts/docs/finance_data_api_docs.html",
+        NewsApiConfig.name: "accounts/docs/news_data_api_docs.html"
     }
 
     return render(request, api_doc_dict[api_name])

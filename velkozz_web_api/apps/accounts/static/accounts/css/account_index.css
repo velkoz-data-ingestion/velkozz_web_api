@@ -1,10 +1,10 @@
 /* Styling the Grid to list API info cards: */
 .user_api_grid {
     display: grid;
-    gap: 1rem;
+    gap: 1.5rem;
 
     /* Dynamic column and row creation and styling: */
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    grid-template-columns: auto auto;
 }
 
 .main-header {
@@ -17,13 +17,12 @@
 .user_api_grid div {
     border-radius: 6px;
     border: 1px solid;
-    border-color: var(--btn-grey-border);
+    color: #b2becd;
 }
 
 .card p {
-    padding-left: 1em;
-    padding-right: 1em;
-
+    text-align: center;
+    padding: 1em;
 }
 
 .card a {
@@ -34,7 +33,7 @@
 /* Styling the documentation button: */
 .btn {
     border-radius: 6px;
-    background-color: var(--btn-grey-backgroup);
+    background-color: #074aa1;
 }
 
 .btn, .btn:visited {

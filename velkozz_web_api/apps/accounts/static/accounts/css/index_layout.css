@@ -2,9 +2,9 @@
 .internal-grid {
     display: grid;
     gap: 1rem;
-
     /* Dynamic column and row creation and styling: */
     grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    padding-bottom: 2em;
 } 
 
 /* Configuring card element grid placements: */
@@ -27,6 +27,11 @@
     text-align: center;
     color: var(--text-color); 
     
+}
+
+.main-desc-paragraph {
+    padding-top: 2em;
+    padding-bottom: 2em;
 }
 
 /* Two Sub Display Cards: */

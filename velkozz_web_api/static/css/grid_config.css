@@ -2,6 +2,7 @@
 .header-card {
     background: var(--light-grey);
     font-size: 3rem;
+    display: inline;
     box-shadow: rgba(3, 8, 20, 0.1) 0px 0.15rem 0.5rem, rgba(2, 8, 20, 0.1) 0px 0.075rem 0.175rem;
     height: 5rem;
     width: 100%;

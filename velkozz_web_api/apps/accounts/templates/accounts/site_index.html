@@ -10,28 +10,34 @@
 {% block body %}
 
     <div class="grid-item-1 main-card">
-        <h1>Velkozz Data APIs</h1>
-        <p>REST APIs that provide various structured data.</p>
+        <h1>The Velkoz Data Ingestion Project</h1>
+        <h4 style="text-align: center;">A REST API service providing coellated web-extracted data.</h4>
+
+        <p class="main-desc-paragraph">
+        The Velkozz data project is designed to extract, transform and aggregate data from across the web. The project is an open source project built using the Django-Rest-Framework (DRF). The Velkozz Data Project is made up of multiple servers and applications that: extract data via web scrapers, aggregate/transform and load data into backend databases.
+        The DRF application serves as the front-end user interface into the Velkozz Data Project. The Documentation and structure of the project can be found here.
+        </p>
+
     </div>
     
     <section class="internal-grid">
     <div class="sub-card card">
-        <h2>Browse Velkozz APIs</h2>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Impedit exercitationem ipsa possimus dolorem sunt, sed nesciunt, dolor voluptate, corporis alias veniam sit quod harum explicabo.</p>
+        <h2>Browse Available APIs</h2>
+        <p>If you are new to the project, explore the available APIs and their documentation and/or create a user account.</p>
 
         <section class="two-button-grid">
-            <a class="btn" href="{% url 'user_dashboard' %}">API Dashboard</a>
+            <a class="btn" href="{% url 'user_dashboard' %}">Velkozz APIs</a>
             <a class="btn">User Account</a>
         </section>            
     </div>
     
     <div class="sub-card card">
-        <h2>For Developers & Active Users</h2>    
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Impedit exercitationem ipsa possimus dolorem sunt, sed nesciunt, dolor voluptate, corporis alias veniam sit quod harum explicabo.</p>
+        <h2>Developer Resources</h2>    
+        <p>Are you a developer that uses our REST API or want to contribute to the project? Install one of our Software Development Kits or visit the project’s repository.</p>
 
         <section class="two-button-grid">
             <a class="btn">External Developer APIs</a>
-            <a class="btn" href="https://github.com/MatthewTe/velkozz_web_api">Velkozz Django Source<img src="{% static 'images/icons/github_icon.png' %}"></a>
+            <a class="btn" href="https://github.com/velkoz-data-ingestion">Velkozz Data Project<img src="{% static 'images/icons/github-dark.svg' %}"></a>
         </section>
         
     
