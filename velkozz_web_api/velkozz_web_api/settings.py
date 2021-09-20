@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    "django.contrib.postgres",
 
     # Third Party Apps:
     "rest_framework",
@@ -49,7 +50,10 @@ INSTALLED_APPS = [
     "news_api.apps.NewsApiConfig",
 
     # Academia Data API Application:
-    "academia_api.apps.AcademiaApiConfig"
+    "academia_api.apps.AcademiaApiConfig",
+
+    # Geography Data API Application:
+    "geography_api.apps.GeographyApiConfig"
 
     # The Labeled Machine Learning Data Application:
     #"ml_labeled_data.apps.MlLabeledDataConfig"
