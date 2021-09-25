@@ -18,5 +18,8 @@ urlpatterns = [
     path("finance_api/", include("apps.finance_api.urls")),
 
     # Routes for the News Article Data API urls:
-    path("news_api/", include("apps.news_api.urls"))
+    path("news_api/", include("apps.news_api.urls")),
+
+    # Routes for the Geography Data API urls:
+    path("geography_api/", include("apps.geography_api.urls"))
 ]

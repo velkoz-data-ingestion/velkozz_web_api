@@ -39,8 +39,6 @@ class DailyYoutubeChannelStatsViewSet(AbstractModelViewSet):
         channel_name = request.GET.get("Channel-Name", None)
         channel_id = request.GET.get("Channel-ID", None)
 
-        print(channel_name)
-
         # Querying and seralizing the database for Youtube Channel Posts:
         queryset = youtube_models.DailyYoutubeChannelStats.objects.all()
 

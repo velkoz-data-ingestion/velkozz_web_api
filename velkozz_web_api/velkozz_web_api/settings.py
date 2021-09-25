@@ -95,10 +95,24 @@ WSGI_APPLICATION = 'velkozz_web_api.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
+# SQLITE and PSQL Test/local development databases:
+"""
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
+"""
+# Database:
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': "django_db",
+        'USER': "test_django",
+        'PASSWORD': "test",
+        'HOST': "127.0.0.1",
+        'PORT': "5432"
     }
 }
 
