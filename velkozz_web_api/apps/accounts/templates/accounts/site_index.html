@@ -27,7 +27,11 @@
 
         <section class="two-button-grid">
             <a class="btn" href="{% url 'user_dashboard' %}">Velkozz APIs</a>
-            <a class="btn">User Account</a>
+            {% if request.user.is_authenticated == True %}
+                <a class="btn" href="{% url 'user_account_dashboard' %}">User Dashboard</a>
+            {% else %}
+                <a class="btn" href="{% url 'login_page' %}">Create Account</a>
+            {% endif %}
         </section>            
     </div>
     

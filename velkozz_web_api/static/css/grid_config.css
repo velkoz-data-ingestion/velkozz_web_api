@@ -1,7 +1,7 @@
 /* Header Card Custom Config */
 .header-card {
     background: var(--light-grey);
-    font-size: 3rem;
+    font-size: 5rem;
     display: inline;
     box-shadow: rgba(3, 8, 20, 0.1) 0px 0.15rem 0.5rem, rgba(2, 8, 20, 0.1) 0px 0.075rem 0.175rem;
     height: 5rem;
@@ -21,11 +21,11 @@
     float: left;
     color: #ffffff;
     text-align: center;
-    font-size: 17px;
+    font-size: 19px;
     padding-left: 0.5em;
     padding-right: 1em;
     padding-top: 1.5em;
-    padding-bottom: 1.0em;
+    padding-bottom: 0em;
 }
 
 #icon-format {
