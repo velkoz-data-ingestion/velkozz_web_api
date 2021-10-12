@@ -12,34 +12,40 @@ from accounts.views import AbstractModelViewSet
 import json
 
 # Importing Database Models and Seralizer Objects
-from social_media_api.models.reddit import reddit_models
-from .reddit_serializers import *
+from social_media_api.models.reddit.reddit_models import RedditPosts
+from .reddit_serializers import RedditPostsSerializer
 
 # Abstract ModelViewSet for Reddit Posts:
 class RedditPostViewSet(AbstractModelViewSet):
-    """Abstract class for the ModelViewSet for Subreddit database
-    models. 
+    """The ViewSet for the Reddit Posts Data model. The ViewSet
+    provides all of the CRUD operations for the RedditPosts model and
+    connects this model to the REST API. 
     """
-    serializer_class = None
-    init_model = None
-    queryset = None
+    serializer_class = RedditPostsSerializer
+    queryset = RedditPosts.objects.all().order_by("created_on")
 
     def list(self, request):
-        """The ViewSet method overwritten that contains the
-        logic for processing GET requests from the generic post
-        database table.   
+        """The ViewSet contains the logic for processing GET requests
+        to the reddit post database table. It filters posts primarily by
+        subreddit.
         """
         # Creating a context dict to be populated:
         context = {}
         context['request'] = request
         
         # Extracting query params from url:
+        subreddit = request.GET.get("Subreddit", None)
         start_date = request.GET.get("Start-Date", None)
         end_date = request.GET.get("End-Date", None)
         
-        queryset = self.init_model.objects.all()
+        queryset = RedditPosts.objects.all()
 
         # Conditionals applying logic to queryset based on url params: 
+
+        # Requiring Subreddit Query Param to filter dataset:
+        if subreddit is not None:
+            queryset = queryset.filter(subreddit=subreddit)
+
         # Date Time Filtering:
         if start_date is None and end_date is None:
             pass
@@ -53,18 +59,19 @@ class RedditPostViewSet(AbstractModelViewSet):
             if start_date and end_date is not None:
                 queryset = queryset.filter(created_on__range=(start_date,end_date))
 
-        serializer = self.serializer_class(queryset.order_by("created_on"), many=True, context=context)
+        serializer = RedditPostsSerializer(queryset.order_by("created_on"), many=True, context=context)
 
         return Response(serializer.data)
     
     def create(self, request):
-        """
+        """The method that processes the POST requests made to the REST API and
+        creates the django model objects necessary to write subreddit post data to the database. 
         """
         # Creating a context dict to be populated:
         context = {}
         context['request'] = request
         
-        queryset = self.init_model.objects.all().order_by("created_on")
+        queryset = RedditPosts.objects.all().order_by("created_on")
 
         # If Requests Body contains POST data:
         if request.body:
@@ -74,10 +81,11 @@ class RedditPostViewSet(AbstractModelViewSet):
 
         # Performing a bulk insert for all posts recieved by the POST request:
         posts_objects = [
-            self.init_model.objects.update_or_create(
+            RedditPosts.objects.update_or_create(
                 id = post["id"],
                 defaults= {
                 "id":post["id"],
+                "subreddit": post["subreddit"],
                 "title":post["title"],
                 "content":post["content"],
                 "upvote_ratio":post["upvote_ratio"],
@@ -99,193 +107,8 @@ class RedditPostViewSet(AbstractModelViewSet):
         
         # Seralizing the objects that had been creatd:
         posts_objects = [post[0] for post in posts_objects]
-        serializer = self.serializer_class(posts_objects, many=True, context=context)
+        serializer = RedditPostsSerializer(posts_objects, many=True, context=context)
         
         return Response(serializer.data)
 
 
-# Subreddit Specific ViewSets:
-class WallStreetBetsViewSet(RedditPostViewSet):
-    serializer_class = WallStreetBetsPostsSerializer
-    init_model = serializer_class.Meta.model
-    queryset = init_model.objects.all().order_by("created_on")
-
-class SciencePostsViewSet(RedditPostViewSet):
-    serializer_class = SciencePostsSerializer
-    init_model = serializer_class.Meta.model
-    queryset = init_model.objects.all().order_by("created_on")
-
-class WorldNewsPostsViewSet(RedditPostViewSet):
-    serializer_class = WorldNewsPostsSerializer
-    init_model = serializer_class.Meta.model
-    queryset = init_model.objects.all().order_by("created_on")
-
-class NewsPostsViewSet(RedditPostViewSet):
-    serializer_class = NewsPostsSerializer
-    init_model = serializer_class.Meta.model
-    queryset = init_model.objects.all().order_by("created_on")
-
-class EnergyPostsViewSet(RedditPostViewSet):
-    serializer_class = EnergyPostsSerializer
-    init_model = serializer_class.Meta.model
-    queryset = init_model.objects.all().order_by("created_on")
-
-class EconomicsPostsViewSet(RedditPostViewSet):
-    serializer_class = EconomicsPostsSerializer
-    init_model = serializer_class.Meta.model
-    queryset = init_model.objects.all().order_by("created_on")
-
-class PoliticsPostsViewSet(RedditPostViewSet):
-    serializer_class = PoliticsPostsSerializer
-    init_model = serializer_class.Meta.model
-    queryset = init_model.objects.all().order_by("created_on")
-
-class CanadaPostsViewSet(RedditPostViewSet):
-    serializer_class = CanadaPostsSerializer
-    init_model = serializer_class.Meta.model
-    queryset = init_model.objects.all().order_by("created_on")
-
-class UKPoliticsPostsViewSet(RedditPostViewSet):
-    serializer_class = UKPoliticsPostsSerializer
-    init_model = serializer_class.Meta.model
-    queryset = init_model.objects.all().order_by("created_on")
-
-class PalestinePostsViewSet(RedditPostViewSet):
-    serializer_class = PalestinePostsSerializer
-    init_model = serializer_class.Meta.model
-    queryset = init_model.objects.all().order_by("created_on")
-
-class MiddleEastNewsPostsViewSet(RedditPostViewSet):
-    serializer_class = MiddleEastNewsPostsSerializer
-    init_model = serializer_class.Meta.model
-    queryset = init_model.objects.all().order_by("created_on")
-
-class IsraelPostsViewSet(RedditPostViewSet):
-    serializer_class = IsraelPostsSerializer
-    init_model = serializer_class.Meta.model
-    queryset = init_model.objects.all().order_by("created_on")
-
-class PakistanPostsViewSet(RedditPostViewSet):
-    serializer_class = PakistanPostsSerializer
-    init_model = serializer_class.Meta.model
-    queryset = init_model.objects.all().order_by("created_on")
-
-class IndiaPostsViewSet(RedditPostViewSet):
-    serializer_class = IndiaPostsSerializer
-    init_model = serializer_class.Meta.model
-    queryset = init_model.objects.all().order_by("created_on")
-
-class LibertarianPostsViewSet(RedditPostViewSet):
-    serializer_class = LibertarianPostsSerializer
-    init_model = serializer_class.Meta.model
-    queryset = init_model.objects.all().order_by("created_on")
-
-class ConservativePostsViewSet(RedditPostViewSet):
-    serializer_class = ConservativePostsSerializer
-    init_model = serializer_class.Meta.model
-    queryset = init_model.objects.all().order_by("created_on")
-
-class SocialismPostsViewSet(RedditPostViewSet):
-    serializer_class = SocialismPostsSerializer
-    init_model = serializer_class.Meta.model
-    queryset = init_model.objects.all().order_by("created_on")
-
-class ProgressivePostsViewSet(RedditPostViewSet):
-    serializer_class = ProgressivePostsSerializer
-    init_model = serializer_class.Meta.model
-    queryset = init_model.objects.all().order_by("created_on")
-
-class DemocratsPostsViewSet(RedditPostViewSet):
-    serializer_class = DemocratsPostsSerializer
-    init_model = serializer_class.Meta.model
-    queryset = init_model.objects.all().order_by("created_on")
-
-class LiberalPostsViewSet(RedditPostViewSet):
-    serializer_class = LiberalPostsSerializer
-    init_model = serializer_class.Meta.model
-    queryset = init_model.objects.all().order_by("created_on")
-
-class TechnologyPostsViewSet(RedditPostViewSet):
-    serializer_class = TechnologyPostsSerializer
-    init_model = serializer_class.Meta.model
-    queryset = init_model.objects.all().order_by("created_on")
-
-class RealTechPostsViewSet(RedditPostViewSet):
-    serializer_class = RealTechPostsSerializer
-    init_model = serializer_class.Meta.model
-    queryset = init_model.objects.all().order_by("created_on")
-
-class TechPostsViewSet(RedditPostViewSet):
-    serializer_class = TechPostsSerializer
-    init_model = serializer_class.Meta.model
-    queryset = init_model.objects.all().order_by("created_on")
-
-class NeutralPoliticsViewSet(RedditPostViewSet):
-    serializer_class = NeutralPoliticsPostsSerializer
-    init_model = serializer_class.Meta.model
-    queryset = init_model.objects.all().order_by("created_on")
-
-class ChinaPostsViewSet(RedditPostViewSet):
-    serializer_class = ChinaPostsSerializer
-    init_model = serializer_class.Meta.model
-    queryset = init_model.objects.all().order_by("created_on")
-
-class TaiwanPostsViewSet(RedditPostViewSet):
-    serializer_class = TaiwanPostsSerializer
-    init_model = serializer_class.Meta.model
-    queryset = init_model.objects.all().order_by("created_on")
-
-class JapanPostsViewSet(RedditPostViewSet):
-    serializer_class = JapanPostsSerializer
-    init_model = serializer_class.Meta.model
-    queryset = init_model.objects.all().order_by("created_on")
-
-class KoreaPostsViewSet(RedditPostViewSet):
-    serializer_class = KoreaPostsSerializer
-    init_model = serializer_class.Meta.model
-    queryset = init_model.objects.all().order_by("created_on")
-
-class SingaporePostsViewSet(RedditPostViewSet):
-    serializer_class = SingaporePostsSerializer
-    init_model = serializer_class.Meta.model
-    queryset = init_model.objects.all().order_by("created_on")
-
-class MalaysiaPostsViewSet(RedditPostViewSet):
-    serializer_class = MalaysiaPostsSerializer
-    init_model = serializer_class.Meta.model
-    queryset = init_model.objects.all().order_by("created_on")
-
-class ThailandPostsViewSet(RedditPostViewSet):
-    serializer_class = ThailandPostsSerializer
-    init_model = serializer_class.Meta.model
-    queryset = init_model.objects.all().order_by("created_on")
-
-class NorthKoreaPostsViewSet(RedditPostViewSet):
-    serializer_class = NorthKoreaPostsSerializer
-    init_model = serializer_class.Meta.model
-    queryset = init_model.objects.all().order_by("created_on")
-
-class NorthKoreaNewsPostsViewSet(RedditPostViewSet):
-    serializer_class = NorthKoreaNewsPostsSerializer
-    init_model = serializer_class.Meta.model
-    queryset = init_model.objects.all().order_by("created_on")
-
-class ConflictNewsPostsViewSet(RedditPostViewSet):
-    serializer_class = ConflictNewsPostsSerializer
-    init_model = serializer_class.Meta.model
-    queryset = init_model.objects.all().order_by("created_on")
-
-class HongKongPostsViewSet(RedditPostViewSet):
-    serializer_class = HongKongPostsSerializer
-    init_model = serializer_class.Meta.model
-    queryset = init_model.objects.all().order_by("created_on")
-
-class SpacePostsViewSet(RedditPostViewSet):
-    serializer_class = SpacePostsSerializer
-    init_model = serializer_class.Meta.model
-    queryset = init_model.objects.all().order_by("created_on")
-
-class CryptoCurrencyPostsViewSet(RedditPostViewSet):
-    serializer_class = CryptoCurrencyPostsSerializer
-    init_model = serializer_class.Meta.model
-    queryset = init_model.objects.all().order_by("created_on")
