@@ -10,12 +10,8 @@ from .model_views_seralizers.youtube_api import youtube_views
 # Creating Url Router:
 router = routers.DefaultRouter()
 
-# Extracting a list of all ModelViewSet objects by extracting all the subclasses of parent object: 
-subreddit_viewsets = reddit_views.RedditPostViewSet.__subclasses__()
-
-# Iterating over each ModelViewSet dynamically registering routes to the router:
-for viewset in subreddit_viewsets:
-    router.register(fr"reddit/r{viewset.init_model.subreddit_name}", viewset)
+# Adding endpoint for Reddit Post API:
+router.register(r"reddit/top_posts", reddit_views.RedditPostViewSet)
 
 # Adding endpoints for Indeed Job Listings:
 router.register(r"jobs/indeed/listings", indeed_views.IndeedJobPostsViewSets)

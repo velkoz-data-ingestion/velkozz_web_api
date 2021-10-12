@@ -6,12 +6,8 @@ from .models.reddit.reddit_models import RedditPosts
 from .models.indeed.indeed_models import IndeedJobPosts
 from .models.youtube.youtube_models import DailyYoutubeChannelStats
 
-# All of the Subreddit model posts extended from RedditPosts:
-reddit_db_models = RedditPosts.__subclasses__()
-
-# Registering the Reddit Posts Models to the Admin Dashboard:
-for reddit_model in reddit_db_models:
-    admin.site.register(reddit_model)
+# Registering the Reddit Posts Model to Admin Dashboard:
+admin.site.register(RedditPosts)
 
 # Registering Indeed Models to Admin Dash:
 admin.site.register(IndeedJobPosts)
