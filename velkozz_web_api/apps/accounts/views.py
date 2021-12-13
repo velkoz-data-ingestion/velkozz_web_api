@@ -115,6 +115,9 @@ def account_dashboard(request):
 
     #TODO: Fix this Resampling. Producing List of lists instead of just list.
 
+    # TODO: Create a query for Reddit Pipeline ETL that is used to plot the graphs of Reddit Data Ingestion.
+
+
     # logic to not resample if index is broken (eg: There is no data so index is an empty list):
     if len(user_req_df) == 0:
            return render(request, 'accounts/user_account_dashboard.html', context=context)

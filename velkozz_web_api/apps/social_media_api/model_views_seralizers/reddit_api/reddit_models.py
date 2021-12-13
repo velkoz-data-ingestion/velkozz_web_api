@@ -13,8 +13,8 @@ import time
 from datetime import date, timedelta, datetime
 import pytz
 
-# TODO: Sperate the Pipeline Model from the Reddit Dev App Model - create seperate Pipeline Model.
-
+# TODO: Add event listener to Background Scheduelr to log database stuff for the actual scheduler.
+# BackgroundScheduler.add_listener()
 
 # Model for Reddit Developr API: 
 class RedditDevApps(models.Model):
@@ -22,13 +22,9 @@ class RedditDevApps(models.Model):
 
     It is used to authenticate PRAW for the web scrapers. The database model is designed to 
     maintain and run reddit ETL pipelines that are attached to the Developer Apps. This database
-    model is designed to only have one entry and as such the modification of this model's field
-    are used to manage the reddit ETL ingestion pipelines.
+    model is designed to only have one entry.
 
-    The main pipeline for ingesting reddit posts are managed by changes in the model's fields. The
-    reddit data ingestion methods (the pipeline) are stored as internal methods of the model object.
-    The base save() function is overwritten to activate or de-activate the scheduled ingestion pipeline
-    based on changes in the 'active_status' model field.
+    The main pipeline for ingesting reddit posts are managed by changes in the RedditPipeline model.
 
     Attributes:
         application_name (models.CharField): The name of the developer application.
@@ -39,6 +35,29 @@ class RedditDevApps(models.Model):
 
         user_agent (models.CharField): The description of the reddit application used for application only flow of PRAW auth.
 
+    """
+    # Configuration of the Reddit Dev Account:
+    application_name = models.CharField(max_length=25)
+    client_id = models.CharField(max_length=35)
+    client_secret = models.CharField(max_length=50)
+    user_agent = models.CharField(max_length=100)
+    
+    class Meta:
+        verbose_name_plural = "Reddit Developer Applications"
+        abstract = False
+
+    def __str__(self):
+        return self.application_name
+
+# Model for the Reddit Pipeline:
+class RedditPipeline(models.Model):
+    """A database model that represents the Reddit ETL Pipeline. A single insance of this object is created and
+    it is used to toggle the Reddit ETL Pipeline on and off based on the modification of the model fields.
+
+    This is done by attaching the Pipeline logic to the save() method of the model, allowing the Background Schdeuler
+    to be modified everytime a config field is saved.
+
+    Attributes:
         pipeline_active (models.BooleanField): A boolean that activates or deactivates the reddit ETL pipeline.
 
         pipeline_test_status (models.BooleanField): A boolean field indicating if the pipeline is started in test mode or not.
@@ -51,14 +70,8 @@ class RedditDevApps(models.Model):
 
         active_modified (models.DateTimeField): field indicating the last time any key parameter was changed regarding the activation
             status of the pipeline.
-
+            
     """
-    # Configuration of the Reddit Dev Account:
-    application_name = models.CharField(max_length=25)
-    client_id = models.CharField(max_length=35)
-    client_secret = models.CharField(max_length=50)
-    user_agent = models.CharField(max_length=100)
-    
     # Background Scheduler status:
     pipeline_active = models.BooleanField(default=False)
     active_modified = models.DateTimeField(auto_now=True)
@@ -68,10 +81,6 @@ class RedditDevApps(models.Model):
     test_interval = models.IntegerField(default=2)
     prod_interval = models.IntegerField(default=12)
 
-    class Meta:
-        verbose_name_plural = "Reddit Developer Applications"
-        abstract = False
-
     def save(self, *args, **kwargs):
         """Overwriting the default save method so that when changes are made to the model fields these
         changes are reflected in changes in the Pipeline object.
@@ -79,25 +88,35 @@ class RedditDevApps(models.Model):
         The save method saves all the changes to the fields in the database and then creates a RedditPipeline
         object using said model fields that are used to ingest reddit data in the background.
         """
-        # Initiating default saving model:
-        super().save(*args, **kwargs)
+        # Querying the RedditDevApps model to enusre that Reddit Dev Credentials exist:
+        reddit_dev_apps = RedditDevApps.objects.all().first()
 
-        # Creating Reddit Object Instance:
-        reddit_pipeline = self.RedditPipeline(
-            test_status=self.pipeline_test_status,
-            pipeline_active=self.pipeline_active,
-            test_interval=self.test_interval,
-            prod_interval=self.prod_interval
-        )
+        # If Reddit Dev Creds exists, initalizing pipeline: 
+        if reddit_dev_apps != None:
+            # Executing dafault save method:
+            super().save(*args, **kwargs)
 
-        # Activating the reddit pipeline based on the new params:
-        if self.pipeline_active:
-            print("STARTING SCHEDULER")
-            reddit_pipeline.start_scheduler()
-            print(reddit_pipeline.pipeline_active)
+            # Creating Reddit Object Instance:
+            reddit_pipeline = self.RedditPipelineScheduler(
+                test_status=self.pipeline_test_status,
+                pipeline_active=self.pipeline_active,
+                test_interval=self.test_interval,
+                prod_interval=self.prod_interval
+            )
+
+            # Activating the reddit pipeline based on the new params:
+            if self.pipeline_active:
+                reddit_pipeline.start_scheduler()
+
+            else:
+                pass
+        
+        # If there is no Reddit Dev Application then not performing the save() function as there is no 
+        # propose for creating a RedditPipeline instance. 
         else:
-            reddit_pipeline.stop_scheduler()
+            pass
 
+    # Reddit ETL Logic:
     def load_reddit_data():
         """Method uses to PRAW api to extract top and hot posts from a specific subreddit and 
         write it to the database.
@@ -118,7 +137,7 @@ class RedditDevApps(models.Model):
 
         # Extracting and downloading top and hot daily posts from each subreddit:
         for subreddit in subreddits:
-            print(subreddit)
+            
             # Creating subreddit instance:
             subreddit_instance = reddit.subreddit(subreddit)
 
@@ -208,8 +227,7 @@ class RedditDevApps(models.Model):
                             "comment_karma":comment_karma               
                         }
                     )
-                    print(x)
-
+                    
             # Loading all reddit posts to the database:
             try:
                 write_posts(top_posts_lst)
@@ -230,7 +248,8 @@ class RedditDevApps(models.Model):
 
         time.sleep(5)
 
-    class RedditPipeline:
+    # Reddit ETL Pipeline Object w/ Backround Scheduler:
+    class RedditPipelineScheduler:
         """A method that is used to stop and start the reddit Background Scheduler. It is a class for state management.
 
         Args:
@@ -255,20 +274,21 @@ class RedditDevApps(models.Model):
             self.prod_interval = prod_interval
 
             if self.test_status:
-                self.scheduler.add_job(RedditDevApps.load_reddit_data, "interval", minutes=self.test_interval)
+                self.scheduler.add_job(RedditPipeline.load_reddit_data, "interval", minutes=self.test_interval)
             else:
-                self.scheduler.add_job(RedditDevApps.load_reddit_data, "interval", hours=self.prod_interval)
+                self.scheduler.add_job(RedditPipeline.load_reddit_data, "interval", hours=self.prod_interval)
 
         def start_scheduler(self):
             self.scheduler.start()
             self.pipeline_active = True 
             
         def stop_scheduler(self):
-            self.scheduler.stop()
+            self.scheduler.pause()
             self.pipeline_active = False
 
-    def __str__(self):
-        return self.application_name
+    class Meta:
+        abstract = False
+        verbose_name_plural = "Reddit ETL Pipeline"
 
 # Form associated with the Reddit Developer Application:
 class RedditDevAppForm(ModelForm):

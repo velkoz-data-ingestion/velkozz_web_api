@@ -2,7 +2,7 @@
 from django.contrib import admin
 
 # Importing Database Base Models:
-from social_media_api.model_views_seralizers.reddit_api.reddit_models import RedditPosts, RedditDevApps, RedditDevAppForm, Subreddits, RedditLogs
+from social_media_api.model_views_seralizers.reddit_api.reddit_models import RedditPosts, RedditDevApps, RedditDevAppForm, Subreddits, RedditLogs, RedditPipeline
 from .models.indeed.indeed_models import IndeedJobPosts
 from .models.youtube.youtube_models import DailyYoutubeChannelStats
 
@@ -19,10 +19,19 @@ class RedditDevAppAdmin(admin.ModelAdmin):
             return True
         return False
 
+class RedditPipelineAdmin(admin.ModelAdmin):
+    # Preventing the creation of more than one entity (we only need one Pipeline Object):
+    def has_add_permission(self, request):
+        count = RedditPipeline.objects.all().count()
+        if count == 0:
+            return True
+        return False
+
 # Registering the Reddit ETL Models to Admin Dashboard:
 admin.site.register(Subreddits)
 admin.site.register(RedditPosts)
 admin.site.register(RedditDevApps, RedditDevAppAdmin)
+admin.site.register(RedditPipeline, RedditPipelineAdmin) 
 admin.site.register(RedditLogs)
 
 # Registering Indeed Models to Admin Dash:
