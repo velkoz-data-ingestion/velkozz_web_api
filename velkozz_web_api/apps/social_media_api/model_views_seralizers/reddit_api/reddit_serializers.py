@@ -2,7 +2,8 @@
 from rest_framework import serializers
 
 # Importing Database models:
-from social_media_api.models.reddit import reddit_models
+from social_media_api.model_views_seralizers.reddit_api import reddit_models
+
 # Abstract Serializer Objects:
 class RedditPostsSerializer(serializers.HyperlinkedModelSerializer):
     

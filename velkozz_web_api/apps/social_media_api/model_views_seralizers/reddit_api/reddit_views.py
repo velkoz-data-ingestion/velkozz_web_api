@@ -12,7 +12,7 @@ from accounts.views import AbstractModelViewSet
 import json
 
 # Importing Database Models and Seralizer Objects
-from social_media_api.models.reddit.reddit_models import RedditPosts
+from social_media_api.model_views_seralizers.reddit_api.reddit_models import RedditPosts
 from .reddit_serializers import RedditPostsSerializer
 
 # Abstract ModelViewSet for Reddit Posts:
@@ -111,4 +111,4 @@ class RedditPostViewSet(AbstractModelViewSet):
         
         return Response(serializer.data)
 
-
+# Reddit ETL Pipeline Scheduler Methods:

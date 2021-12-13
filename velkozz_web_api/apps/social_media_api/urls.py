@@ -21,4 +21,3 @@ router.register(r"youtube/channel_daily", youtube_views.DailyYoutubeChannelStats
 
 # Creating Automatic URL Routing:
 urlpatterns = router.urls
-    
