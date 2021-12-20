@@ -54,7 +54,10 @@
     
     {% if request.user.is_staff == True %}
         <div class="ETL Pipelines">
-            <h1>ETL Pipelines</h1>
+            <h1><u>Social Media Pipelines</u></h1>
+            <ul>
+                <li><a href="{% url 'reddit_pipeline_dash' %}">Reddit Pipelines</a></li>
+            </ul>
 
         </div>
     {% endif %}

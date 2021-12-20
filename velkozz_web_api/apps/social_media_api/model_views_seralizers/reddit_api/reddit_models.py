@@ -234,15 +234,15 @@ class RedditPipeline(models.Model):
                 write_posts(hot_posts_lst)
 
                 # Logging the Reddit Requests made:
-                top_log = RedditLogs(subreddit=subreddit, fliter="top", num_posts=len(top_posts_lst), status_code=200)
-                hot_log= RedditLogs(subreddit=subreddit, fliter="hot", num_posts=len(hot_posts_lst), status_code=200)
+                top_log = RedditLogs(subreddit=subreddit, subreddit_filter="top", num_posts=len(top_posts_lst), status_code=200)
+                hot_log= RedditLogs(subreddit=subreddit, subreddit_filter="hot", num_posts=len(hot_posts_lst), status_code=200)
                 top_log.save()
                 hot_log.save()
                 
             except Exception as e:
                 # Logging the Reddit Requests made if ingestion does not work:
-                top_log = RedditLogs(subreddit=subreddit, fliter="top", num_posts=len(top_posts_lst), status_code=400, error_msg=e)
-                hot_log= RedditLogs(subreddit=subreddit, fliter="hot", num_posts=len(hot_posts_lst), status_code=400, error_msg=e)
+                top_log = RedditLogs(subreddit=subreddit, subreddit_filter="top", num_posts=len(top_posts_lst), status_code=400, error_msg=e)
+                hot_log= RedditLogs(subreddit=subreddit, subreddit_filter="hot", num_posts=len(hot_posts_lst), status_code=400, error_msg=e)
                 top_log.save()
                 hot_log.save()
 
@@ -283,7 +283,7 @@ class RedditPipeline(models.Model):
             self.pipeline_active = True 
             
         def stop_scheduler(self):
-            self.scheduler.pause()
+            self.scheduler.remove()
             self.pipeline_active = False
 
     class Meta:
@@ -430,7 +430,7 @@ class RedditLogs(models.Model):
     Attributes:
         subreddit (models.CharField): The name of the subreddit where the posts were extracted from.
 
-        filter (models.CharField): The filter applied to the subreddit search to get the post (eg: top, hot).
+        subreddit_filter (models.CharField): The filter applied to the subreddit search to get the post (eg: top, hot).
 
         extracted_on (models.DateTimeField): The datetime that the request was made to reddit throught the PRAW API.
 
@@ -442,7 +442,7 @@ class RedditLogs(models.Model):
 
     """
     subreddit = models.CharField(max_length=50)
-    fliter = models.CharField(max_length=10)
+    subreddit_filter = models.CharField(max_length=10)
     extracted_on = models.DateTimeField(auto_now=True)
     num_posts = models.IntegerField()
     status_code = models.IntegerField()

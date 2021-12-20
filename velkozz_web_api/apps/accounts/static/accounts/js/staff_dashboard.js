@@ -18,7 +18,7 @@ const main_date = daily_get_timeseries.map(date_str => Date.parse(date_str));
 
 const daily_GET_summary_trace = {
     type: "scatter",
-    name: "GET",
+    name: "GET",    
     fill: 'tozeroy', 
     stackgroup: 'one',
     x: main_date,
