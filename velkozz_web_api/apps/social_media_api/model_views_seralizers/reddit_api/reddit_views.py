@@ -1,11 +1,14 @@
 # Importing Django Methods:
 from django.shortcuts import render
+from django.contrib.auth.decorators import user_passes_test
 from rest_framework import viewsets
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 
+
 # Importing the custom DjangoModelPermissions and ModelViewSets:
+from accounts.permissions import staff_check
 from accounts.views import AbstractModelViewSet
 
 # Importing Data Management Packages:
@@ -67,8 +70,8 @@ class RedditPostViewSet(AbstractModelViewSet):
         serializer = RedditPostsSerializer(queryset.order_by("created_on"), many=True, context=context)
 
         return Response(serializer.data)
-    
-# The view for the dashboard of reddit pipeline:
+
+@user_passes_test(staff_check)
 def reddit_pipeline_dashboard(request):
     """Method renders the dashboard for the status of a reddit pipeline"""
     context = {}
