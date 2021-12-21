@@ -17,6 +17,7 @@ DEBUG = True
 ALLOWED_HOSTS = ["*"]
 
 # Url Path for Login Redirect:
+LOGIN_URL = "/login"
 LOGIN_REDIRECT_URL = '/'
 
 # Application definition

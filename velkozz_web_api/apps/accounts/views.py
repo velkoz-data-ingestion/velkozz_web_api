@@ -1,5 +1,6 @@
 # Importing Django Packages:
 from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
 from rest_framework import viewsets
 from django.db import models
 from django.contrib import auth
@@ -71,6 +72,7 @@ def account_index(request):
 
     return render(request, "accounts/account_index.html", context)
 
+@login_required
 def account_dashboard(request):
     """The view for the user account dashboard.
     """
@@ -114,6 +116,9 @@ def account_dashboard(request):
     user_req_df["_counter"] = 1
 
     #TODO: Fix this Resampling. Producing List of lists instead of just list.
+
+    # TODO: Create a query for Reddit Pipeline ETL that is used to plot the graphs of Reddit Data Ingestion.
+
 
     # logic to not resample if index is broken (eg: There is no data so index is an empty list):
     if len(user_req_df) == 0:
@@ -189,6 +194,7 @@ def account_auth(request):
     else:
         return redirect("login_page")
 
+@login_required
 def staff_dash(request):
     """Route for displaying the staff dashboard of the site.
     """

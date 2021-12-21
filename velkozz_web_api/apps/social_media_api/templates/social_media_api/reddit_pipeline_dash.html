@@ -1,0 +1,78 @@
+{% extends "core_layout.html" %}
+{% load static %}
+
+{% block title %} Reddit Account Dashboard {% endblock title %}
+
+{% block head %}
+    <link rel="stylesheet" type="text/css" href="{% static 'social_media_api/css/reddit_pipeline_dash.css' %}">
+    <script src="https://cdn.plot.ly/plotly-1.2.0.min.js"></script>
+{% endblock head %}
+
+{% block body %}
+    <div class="main_pipeline_div">
+        <div class="top-text-grid">
+            <div>  
+                <a href="{% url 'admin:social_media_api_redditdevapps_changelist' %}"><u><h1>Reddit Developer Application</h1></u></a>
+                <h3>Application Name: {{DevApp.application_name}}</h3>
+                <h3>Client ID: {{DevApp.client_id}}</h3>
+                <h3>User Agent: {{DevApp.user_agent}}</h3>
+                <h3>Client Secret: {{DevApp.client_secret}}</h3>
+            </div>
+            <div>
+                <a href="{% url 'admin:social_media_api_redditpipeline_changelist' %}"><u><h1>Pipeline Status</h1></u></a>
+                {% if pipeline.pipeline_active == True %}
+                    <h3 style="color: green;">Active Status: {{pipeline.pipeline_active}}</h3>
+                {% else %}
+                    <h3 style="color: red;">Active Status: {{pipeline.pipeline_active}}</h3>
+                {% endif %}
+
+                {% if pipeline.pipeline_test_status == True %}
+                    <h3 style="color: red;">Test Status: {{pipeline.pipeline_test_status}}</h3>
+                {% else %}
+                    <h3 style="color: green;">Test Status: {{pipeline.pipeline_test_status}}</h3>
+                {% endif %}
+
+                <h3>Production Schedule: {{pipeline.prod_interval}} hrs</h3>
+                <h3>Test Schedule:  {{pipeline.test_interval}} mins</h3>
+                <a href="{% url 'admin:social_media_api_subreddits_changelist' %}"><h3>Subreddits</h3></a>
+            </div>
+        </div>
+        
+        <div>
+            <div class="num_posts_timeseries" id="num_posts_timeseries"></div>
+            <div class="reddit_log_timeseries" id="reddit_log_timeseries"></div>
+        </div>
+        <div class="type_posts_grid">
+            <div class="reddit_top_timeseries" id="reddit_top_timeseries"></div>
+            <div class="reddit_hot_timeseries" id="reddit_hot_timeseries"> </div>
+        </div>          
+        <div class="reddit_post_status" id="reddit_post_status"></div>
+
+        <div class="error_msg_table">
+            <table border="2">
+                <tr>
+                    <th colspan="2"><h3>Error Msgs</h3></th>
+                </tr>
+                <th>Timestamp</th>
+                <th>Error msg</th>
+            {% for error in Errors %}
+                <tr>
+                    <td>{{error.extracted_on}}</td>
+                    <td><p style="color: red;">{{error.error_msg}}</p></td>
+                </tr>
+            {% endfor %}
+            </table>
+        </div>
+
+    </div>
+{% endblock body %}
+
+{% block javascript %}
+    {{Daily_Logs|json_script:'daily_logs'}}
+    {{Num_Posts_Seconds|json_script:'num_posts'}}
+    {{Top_Logs|json_script:'top_logs'}}
+    {{Hot_Logs|json_script:'hot_logs'}}
+    {{Status_Code_200_Logs|json_script:'status_code_200'}}
+    {{Status_Code_400_Logs|json_script:'status_code_400'}}
+    <script src="{% static 'social_media_api/js/reddit_pipeline_dashboard.js' %}"></script>
+{% endblock javascript %}

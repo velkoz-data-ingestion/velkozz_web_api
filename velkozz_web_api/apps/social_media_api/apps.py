@@ -2,6 +2,9 @@
 from django.apps import AppConfig, apps
 from django.contrib.auth.management import create_permissions
 
+# Importing 3rd party packages:
+from termcolor import colored
+
 class SocialMediaAPIConfig(AppConfig):
     name = 'social_media_api'
     verbose_name = "Social Media Data API" 
@@ -9,7 +12,7 @@ class SocialMediaAPIConfig(AppConfig):
 
     def ready(self):
         """Upon startup writes MetaData about the Social Media API
-         to the APIApplication database table.
+         to the APIApplication database table.  
         """
         # Importing API Applications Database Model:
         from accounts.models import APIApplication
@@ -25,6 +28,3 @@ class SocialMediaAPIConfig(AppConfig):
             )
         except:
             pass
-
-
-

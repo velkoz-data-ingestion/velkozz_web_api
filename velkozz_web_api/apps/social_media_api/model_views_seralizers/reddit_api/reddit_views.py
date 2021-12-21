@@ -1,19 +1,27 @@
 # Importing Django Methods:
 from django.shortcuts import render
+from django.contrib.auth.decorators import user_passes_test
 from rest_framework import viewsets
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 
+
 # Importing the custom DjangoModelPermissions and ModelViewSets:
+from accounts.permissions import staff_check
 from accounts.views import AbstractModelViewSet
 
 # Importing Data Management Packages:
 import json
+from datetime import date, timedelta
+import time
+import pandas as pd
+import numpy as np
 
 # Importing Database Models and Seralizer Objects
-from social_media_api.models.reddit.reddit_models import RedditPosts
+from social_media_api.model_views_seralizers.reddit_api.reddit_models import RedditPosts, RedditDevApps, RedditLogs, RedditPipeline
 from .reddit_serializers import RedditPostsSerializer
+
 
 # Abstract ModelViewSet for Reddit Posts:
 class RedditPostViewSet(AbstractModelViewSet):
@@ -62,53 +70,77 @@ class RedditPostViewSet(AbstractModelViewSet):
         serializer = RedditPostsSerializer(queryset.order_by("created_on"), many=True, context=context)
 
         return Response(serializer.data)
+
+@user_passes_test(staff_check)
+def reddit_pipeline_dashboard(request):
+    """Method renders the dashboard for the status of a reddit pipeline"""
+    context = {}
+
+    # Querying the status of the reddit pipeline and its developer app:
+    dev_app = RedditDevApps.objects.all().first()
+    pipeline = RedditPipeline.objects.all().first()
+    reddit_logs = RedditLogs.objects.all()
+    reddit_log_errors = reddit_logs.exclude(error_msg=None)
     
-    def create(self, request):
-        """The method that processes the POST requests made to the REST API and
-        creates the django model objects necessary to write subreddit post data to the database. 
-        """
-        # Creating a context dict to be populated:
-        context = {}
-        context['request'] = request
-        
-        queryset = RedditPosts.objects.all().order_by("created_on")
+    # Creating a 1 week window to filter log queries:
+    prev_week = date.today() - timedelta(days=7)
+    # Filtering QuerySets:
+    reddit_logs = reddit_logs.filter(extracted_on__gt=prev_week).values_list("subreddit", "subreddit_filter", "extracted_on", "num_posts", "status_code", "error_msg")
+    
+    # Unpacking the reddit logs into a plottable format:
+    
+    # Converting Reddit Log values into dataframe:
+    reddit_log_cols = ["subreddit", "subreddit_filter", "extracted_on", "num_posts", "status_code", "error_msg"]
+    reddit_logs_df = pd.DataFrame.from_records(reddit_logs, columns=reddit_log_cols, index="extracted_on")
 
-        # If Requests Body contains POST data:
-        if request.body:
-            posts = json.loads(request.body)
-        else:
-            posts = {} # Empty Json if no body content.
+    # Adding counter variable for resampling:
+    reddit_logs_df["_counter"] = 1 
 
-        # Performing a bulk insert for all posts recieved by the POST request:
-        posts_objects = [
-            RedditPosts.objects.update_or_create(
-                id = post["id"],
-                defaults= {
-                "id":post["id"],
-                "subreddit": post["subreddit"],
-                "title":post["title"],
-                "content":post["content"],
-                "upvote_ratio":post["upvote_ratio"],
-                "score":post["score"],
-                "num_comments":post["num_comments"],
-                "created_on":post["created_on"],
-                "stickied":post["stickied"],
-                "over_18":post["over_18"],
-                "spoiler":post["spoiler"],
-                "author_is_gold":post["author_gold"],
-                "author_mod":post["mod_status"],
-                "author_has_verified_email":post["verified_email_status"],
-                "permalink":post["link"],
-                "author":post["author"],
-                "author_created":post["acc_created_on"],
-                "comment_karma":post["comment_karma"]}                
-            ) for post in posts
-        ]
-        
-        # Seralizing the objects that had been creatd:
-        posts_objects = [post[0] for post in posts_objects]
-        serializer = RedditPostsSerializer(posts_objects, many=True, context=context)
-        
-        return Response(serializer.data)
+    # Populating the context:
+    context["DevApp"] = dev_app
+    context["pipeline"] = pipeline
+    
+    # Logic to not resample if index is broken (eg: There is no data so index is an empty list):
+    if len(reddit_logs_df) == 0:
+        return render(request, "social_media_api/reddit_pipeline_dash.html", context=context)
+    else:
+        # Resampling the dataframe into all plottable datasets:
+        daily_resample_rate = reddit_logs_df["_counter"].squeeze().resample("D").sum()
+        num_posts_seconds_resample = reddit_logs_df["num_posts"].squeeze().resample("H").sum()
 
+        # Resampling dataframe for the number of posts extracted based on fliters:
+        top_filter_resample = reddit_logs_df[reddit_logs_df["subreddit_filter"] == "top"]["_counter"].squeeze().resample('D').sum()
+        hot_filter_resample = reddit_logs_df[reddit_logs_df["subreddit_filter"] == "hot"]["_counter"].squeeze().resample('D').sum()
 
+        # Resample for status codes 
+        status_code_200_resample = reddit_logs_df[reddit_logs_df["status_code"] == 200]["_counter"].squeeze().resample('D').sum()
+        status_code_400_resample = reddit_logs_df[reddit_logs_df["status_code"] == 400]["_counter"].squeeze().resample('D').sum()
+
+        # Adding to Context:
+        context["Daily_Logs"] = {
+            "Data": daily_resample_rate.values.tolist(),
+            "Index": daily_resample_rate.index.tolist()
+        }
+        context["Num_Posts_Seconds"] = {
+            "Data" : num_posts_seconds_resample.values.tolist(),
+            "Index": num_posts_seconds_resample.index.tolist()
+        }
+        context["Top_Logs"] = {
+            "Data": top_filter_resample.values.tolist(),
+            "Index": top_filter_resample.index.tolist()
+        }
+        context["Hot_Logs"] = {
+            "Data": hot_filter_resample.values.tolist(),
+            "Index": hot_filter_resample.index.tolist()
+        }
+        context["Status_Code_200_Logs"] = {
+            "Data": status_code_200_resample.values.tolist(),
+            "Index": status_code_200_resample.index.tolist()
+        }
+        context["Status_Code_400_Logs"] = {
+            "Data": status_code_400_resample.values.tolist(),
+            "Index": status_code_400_resample.index.tolist()
+        }
+        context["Errors"] = reddit_log_errors
+
+        return render(request, "social_media_api/reddit_pipeline_dash.html", context=context)

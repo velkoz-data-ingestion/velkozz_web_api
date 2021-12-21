@@ -12,6 +12,7 @@ router = routers.DefaultRouter()
 
 # Adding endpoint for Reddit Post API:
 router.register(r"reddit/top_posts", reddit_views.RedditPostViewSet)
+reddit_dashboard_path = path(r"reddit/dashboard", reddit_views.reddit_pipeline_dashboard, name="reddit_pipeline_dash")
 
 # Adding endpoints for Indeed Job Listings:
 router.register(r"jobs/indeed/listings", indeed_views.IndeedJobPostsViewSets)
@@ -19,6 +20,7 @@ router.register(r"jobs/indeed/listings", indeed_views.IndeedJobPostsViewSets)
 # Adding endpoints for Youtube Data:
 router.register(r"youtube/channel_daily", youtube_views.DailyYoutubeChannelStatsViewSet)
 
+router.urls.append(reddit_dashboard_path)
+
 # Creating Automatic URL Routing:
-urlpatterns = router.urls
-    
+urlpatterns = router.urls 

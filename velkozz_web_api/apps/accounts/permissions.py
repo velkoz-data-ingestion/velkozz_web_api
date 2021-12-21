@@ -30,3 +30,16 @@ class HasAPIAccess(DjangoModelPermissions):
         # Adding a key to perms_map dict adding GET request permission for
         # viewing a django model:
         self.perms_map['GET'] = ['%(app_label)s.view_%(model_name)s']
+
+# Method that ensures that only uses with staff status have access to a specific view:
+def staff_check(user):
+    """A method that checks if a user is a memeber of staff and returns true.
+    It is used by the @user_passes_test() decorator to lock away views that should
+    only be accessed by staff memebers.
+
+    Returns: 
+        Bool: The boolean indicating if a user is a staff memeber or not.
+
+    """
+    return user.is_staff
+    

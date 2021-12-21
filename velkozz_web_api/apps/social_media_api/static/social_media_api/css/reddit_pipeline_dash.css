@@ -1,0 +1,35 @@
+.top-text-grid{
+    display: grid;
+    grid-template-columns: auto auto;
+    gap: 0.5rem;
+}
+
+/* Styling for the Reddit Dev Application Description Tags: */
+.top-text-grid div{
+    border-radius: 6px;
+    border: 1px solid;
+    color: #b2becd;
+    padding-left: 1rem;
+    margin-top: 0.5rem;
+}
+
+/* Individual styling for the total Post Ingestion timeseries: */
+.num_posts_timeseries{
+    margin-top: 1.5rem;
+}
+.reddit_log_timeseries{
+    margin-top: 1.0rem;
+}
+
+/* Grid for plotly plots of different types of reddit posts logged */
+.type_posts_grid {
+    display: inline-flex;
+    grid-template-columns: auto auto;
+}
+
+/* Grid for plotly plots for grid status code logs */
+.post_status_grid{
+    margin-top: 1.5rem;
+    display: inline-flex;
+    grid-template-columns: auto auto;
+}
