@@ -8,6 +8,12 @@ DEBUG = False
 
 ALLOWED_HOSTS = ["*"]
 
+# Production Routes:
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+SECURE_SSL_REDIRECT = True
+
+
 # Url Path for Login Redirect:
 LOGIN_REDIRECT_URL = '/'
 LOGIN_URL = "/login"
@@ -146,7 +152,6 @@ REST_FRAMEWORK = {
 }
 
 # Internationalization:
-SECURE_SSL_REDIRECT = True
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'UTC'
