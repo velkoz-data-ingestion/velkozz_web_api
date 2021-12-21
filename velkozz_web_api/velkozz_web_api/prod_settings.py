@@ -146,6 +146,7 @@ REST_FRAMEWORK = {
 }
 
 # Internationalization:
+SECURE_SSL_REDIRECT = True
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'UTC'
