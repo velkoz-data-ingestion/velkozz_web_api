@@ -11,7 +11,7 @@ __pycache__/
 /timescale_db
 staticroot
 
-# Distribution / packaging
+# Distribution / Packaging:
 .Python
 build/
 develop-eggs/
