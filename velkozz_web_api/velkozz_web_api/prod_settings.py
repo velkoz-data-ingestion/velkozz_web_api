@@ -4,12 +4,13 @@ import os
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.environ['SECRET_KEY']
-DEBUG = True # Change this once static files are served.
+DEBUG = False
 
-ALLOWED_HOSTS = ["0.0.0.0", "127.0.0.1", "localhost", "web-api", "192.168.100.208", "192.168.100.220"]
+ALLOWED_HOSTS = ["*"]
 
 # Url Path for Login Redirect:
 LOGIN_REDIRECT_URL = '/'
+LOGIN_URL = "/login"
 
 # Application definition
 INSTALLED_APPS = [
@@ -91,18 +92,7 @@ DATABASES = {
         'PASSWORD': os.environ["POSTGRES_PASSWORD"],
         'HOST': "velkoz_psql_backend",
         'PORT': os.environ["POSTGRES_PORT"]
-
-    },
-
-    'request' : {
-        'ENGINE':'django.db.backends.postgresql',
-        'NAME':os.environ["TIMESCALE_DB"],
-        'USER':os.environ["TIMESCALE_USER"],
-        'PASSWORD':os.environ["TIMESCALE_PASSWORD"],
-        'HOST': "velkozz_timescale_db",
-        'PORT': os.environ["TIMESCALE_PORT"]
     }
-}
 
 # Password validation:
 AUTH_PASSWORD_VALIDATORS = [
