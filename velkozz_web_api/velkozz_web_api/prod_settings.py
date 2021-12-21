@@ -53,6 +53,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -82,7 +83,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'velkozz_web_api.wsgi.application'
 
-
 # Database:
 DATABASES = {
     'default': {
@@ -93,7 +93,7 @@ DATABASES = {
         'HOST': "velkoz_psql_backend",
         'PORT': os.environ["POSTGRES_PORT"]
     }
-
+}
 # Password validation:
 AUTH_PASSWORD_VALIDATORS = [
     {

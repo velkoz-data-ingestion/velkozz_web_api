@@ -121,10 +121,11 @@ def account_dashboard(request):
 
 
     # logic to not resample if index is broken (eg: There is no data so index is an empty list):
-    if len(user_req_df) == 0:
+    if len(user_req_df) < 2:
            return render(request, 'accounts/user_account_dashboard.html', context=context)
     
     else:
+        print(user_req_df["_counter"].squeeze())
         hour_resample = user_req_df["_counter"].squeeze().resample("H").sum()
         daily_resample = user_req_df["_counter"].squeeze().resample("D").sum()
 
