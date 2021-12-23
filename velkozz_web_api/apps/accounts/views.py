@@ -125,7 +125,7 @@ def account_dashboard(request):
            return render(request, 'accounts/user_account_dashboard.html', context=context)
     
     else:
-        print(user_req_df["_counter"].squeeze())
+        #print(user_req_df["_counter"].squeeze())
         hour_resample = user_req_df["_counter"].squeeze().resample("H").sum()
         daily_resample = user_req_df["_counter"].squeeze().resample("D").sum()
 

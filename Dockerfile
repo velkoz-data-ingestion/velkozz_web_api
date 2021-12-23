@@ -11,8 +11,8 @@ WORKDIR /home/app/velkoz_web_api
 # Running all of the python install components:
 RUN pip install --no-cache-dir -r requirements.txt
 
-EXPOSE 8000
+#EXPOSE 8000
 
 # Configuring and starting the Django Project via a bash script: 
-CMD ["bash", "start_server.sh"]
+ENTRYPOINT ["sh", "start_server.sh"]
 

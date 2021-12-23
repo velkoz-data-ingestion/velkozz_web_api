@@ -1,7 +1,10 @@
 version: "3.9"
 services:
+  
   web-api:
     build: .
+    volumes: 
+      - ~/staticroot:/staticroot
     depends_on:
       - psql_db
     container_name: velkozz_api
@@ -9,8 +12,6 @@ services:
       - velkozz-api-network      
     env_file: 
       - prod_db.env
-    ports:
-      - "8000:8000"
   
   psql_db:
     image: postgres
@@ -20,12 +21,21 @@ services:
       - velkozz-api-network
     env_file:
       - prod_db.env
-    ports:
-      - "5432:5432"
     volumes: 
        # Persist the data between container invocations
        - ~/velkozz_db/api_psql:/var/lib/postgresql/data
-         
+
+  nginx:
+    build: ./nginx
+    volumes: 
+      - ~/staticroot:/staticroot
+    networks:
+      - velkozz-api-network
+    ports:
+      - "80:80"
+    depends_on:
+      - web-api
+
 # Network configuration for API service: 
 networks:
   velkozz-api-network: 

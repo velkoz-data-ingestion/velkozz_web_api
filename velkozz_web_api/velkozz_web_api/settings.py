@@ -15,6 +15,12 @@ DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 
+# Production Routes:
+#SESSION_COOKIE_SECURE = True
+#CSRF_COOKIE_SECURE = True
+#SECURE_SSL_REDIRECT = True
+
+
 # Url Path for Login Redirect:
 LOGIN_URL = "/login"
 LOGIN_REDIRECT_URL = '/'
@@ -106,6 +112,7 @@ DATABASES = {
 }
 """
 # Database:
+"""
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -116,6 +123,19 @@ DATABASES = {
         'PORT': "5432"
     }
 }
+"""
+# Database:
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.environ["POSTGRES_DB"],
+        'USER': os.environ["POSTGRES_USER"],
+        'PASSWORD': os.environ["POSTGRES_PASSWORD"],
+        'HOST': "velkoz_psql_backend",
+        'PORT': os.environ["POSTGRES_PORT"]
+    }
+}
+
 
 
 # Password validation

@@ -39,3 +39,4 @@ praw
 termcolor
 apscheduler
 whitenoise
+gunicorn
