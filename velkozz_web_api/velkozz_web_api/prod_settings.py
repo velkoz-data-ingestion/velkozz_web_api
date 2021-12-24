@@ -11,7 +11,7 @@ ALLOWED_HOSTS = ["*"]
 # Production Routes:
 #SESSION_COOKIE_SECURE = True
 #CSRF_COOKIE_SECURE = True
-SECURE_SSL_REDIRECT = True
+#SECURE_SSL_REDIRECT = True
 
 # Url Path for Login Redirect:
 LOGIN_REDIRECT_URL = '/'
